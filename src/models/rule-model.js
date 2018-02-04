@@ -4,6 +4,7 @@ import { models as contents } from 'playing-content-services';
 
 import { requires } from './requires-schema';
 import { reward } from './reward-schema';
+import { variable } from './variable-schema';
 
 // achievement rules
 const achievement = {
@@ -37,7 +38,7 @@ const custom = {
 const fields = {
   name: { type: 'String', required: true },  // name for the rule
   description: { type: 'String' },           // brief description of the rule
-  type: { type: 'String', enum: [            //  type of rule
+  type: { type: 'String', enum: [            // type of rule
     'achievement',
     'level',
     'custom'
@@ -45,6 +46,7 @@ const fields = {
   achievement: achievement,                  // achievement rule
   level: level,                              // level rule
   custom: custom,                            // custom rule
+  variables: [variable],                     // variables available within this rule
 };
 
 export default function model (app, name) {
@@ -58,3 +60,4 @@ export default function model (app, name) {
 model.schema = fields;
 model.rewards = [reward];
 model.requires = requires;
+model.variables = [variable];
