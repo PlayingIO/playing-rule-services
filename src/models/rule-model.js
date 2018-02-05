@@ -9,13 +9,13 @@ import { variable } from './variable-schema';
 // achievement rules
 const achievement = {
   metric: { type: 'ObjectId' },             // id of the set metric
-  rules: [                                  // array of the set metric that the player will gain
-    item {
+  rules: [{                                 // array of the set metric that the player will gain
+    item: {
       name: { type: 'String' },             // name of the set metric
       number: { type: 'Number' },           // number of this item the player would gain
-    }
+    },
     requires: requires                      // conditions of the achievement
-  ]
+  }]
 };
 
 // level rules
@@ -30,10 +30,10 @@ const level = {
 
 // custom rules
 const custom = {
-  rules: [
+  rules: [{
     rewards: [reward],                         // set of metrics that a player gets when he finishes this action
     requires: requires                         // conditions of the rewards
-  ]
+  }]
 };
 
 /*
