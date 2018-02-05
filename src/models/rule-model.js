@@ -8,13 +8,13 @@ import { variable } from './variable-schema';
 
 // achievement rules
 const achievement = {
-  metric: { type: 'ObjectId' },             // id of the set metric
-  rules: [{                                 // array of the set metric that the player will gain
+  metric: { type: 'ObjectId' },              // id of the set metric
+  rules: [{                                  // array of the set metric that the player will gain
     item: {
-      name: { type: 'String' },             // name of the set metric
-      number: { type: 'Number' },           // number of this item the player would gain
+      name: { type: 'String' },              // name of the set metric
+      number: { type: 'Number' },            // number of this item the player would gain
     },
-    requires: requires                      // conditions of the achievement
+    requires: requires                       // conditions of the achievement
   }]
 };
 
@@ -31,8 +31,8 @@ const level = {
 // custom rules
 const custom = {
   rules: [{
-    rewards: [reward],                         // set of metrics that a player gets when he finishes this action
-    requires: requires                         // conditions of the rewards
+    rewards: [reward],                       // set of metrics that a player gets when he finishes this action
+    requires: requires                       // conditions of the rewards
   }]
 };
 
@@ -51,6 +51,7 @@ const fields = {
   level: level,                              // level rule
   custom: custom,                            // custom rule
   variables: [variable],                     // variables available within this rule
+  tags: [{ type: 'String' }],                // the tags of the rule
 };
 
 export default function model (app, name) {
