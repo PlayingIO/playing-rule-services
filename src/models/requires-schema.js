@@ -3,7 +3,6 @@ import fp from 'mostly-func';
 // metric based condition
 const metricCondition = {
   id: { type: 'String' },                    // id of metric
-  type: { type: 'String' },                  // type of metric
   item: { type: 'String' },                  // set item to be compared
   operator: { type: 'String', enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
@@ -22,7 +21,7 @@ const actionCondition = {
 
 // team based condition
 const teamCondition = {
-  id: { type: 'String' },                    // id of team,
+  id: { type: 'String' },                    // definition id of team,
   role: { type: 'String' },                  // role the player should have
 };
 
@@ -51,25 +50,28 @@ const formulaCondition = {
   rhs: { type: 'String' },                   // rhs formula
 };
 
+const andOrCondition = {
+  type: { type: 'String' },                  // condition type and/or
+  conditions: [{ type: 'Mixed' }],           // array of conditions joined with an AND or OR operator
+  condition: { type: 'Mixed' }
+};
+
 const condition = fp.mergeAll(
   metricCondition,
   actionCondition,
   teamCondition,
   timedCondition,
-  formulaCondition
+  formulaCondition,
+  andOrCondition
 );
 
 // requires structure
 const requires = {
   type: { type: 'String', enum: [            // type of condition
-    'metric',
-    'action',
-    'team',
-    'and',
-    'or'
+    'metric', 'action', 'team', 'and', 'or'
   ]},
-  not: { type: 'Boolean' },                  // whether invert the condition
-  conditions: [condition],                   // array of conditions joined with an AND or OR operator (for condition type and/or)
+  not: { type: 'Boolean', default: false },  // whether invert the condition
+  conditions: [condition],                   // array of conditions
   condition: condition
 };
 
