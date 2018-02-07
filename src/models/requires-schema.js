@@ -2,7 +2,7 @@ import fp from 'mostly-func';
 
 // metric based condition
 const metricCondition = {
-  id: { type: 'String' },                    // id of metric
+  metric: { type: 'String' },                // id of metric
   item: { type: 'String' },                  // set item to be compared
   operator: { type: 'String', enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
@@ -12,7 +12,7 @@ const metricCondition = {
 
 // action based condition
 const actionCondition = {
-  id: { type: 'String' },                    // id of action
+  action: { type: 'String' },                // id of action
   operator: { type: 'String', enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
@@ -21,7 +21,7 @@ const actionCondition = {
 
 // team based condition
 const teamCondition = {
-  id: { type: 'String' },                    // definition id of team,
+  team: { type: 'String' },                  // definition id of team,
   role: { type: 'String' },                  // role the player should have
 };
 
@@ -51,9 +51,11 @@ const formulaCondition = {
 };
 
 const andOrCondition = {
-  type: { type: 'String' },                  // condition type and/or
+  type: { type: 'String', enum: [            // type of condition
+    'metric', 'action', 'team', 'and', 'or'
+  ], required: true },
+  not: { type: 'Boolean', default: false },  // whether invert the condition
   conditions: [{ type: 'Mixed' }],           // array of conditions joined with an AND or OR operator
-  condition: { type: 'Mixed' }
 };
 
 const condition = fp.mergeAll(
@@ -66,13 +68,6 @@ const condition = fp.mergeAll(
 );
 
 // requires structure
-const requires = {
-  type: { type: 'String', enum: [            // type of condition
-    'metric', 'action', 'team', 'and', 'or'
-  ]},
-  not: { type: 'Boolean', default: false },  // whether invert the condition
-  conditions: [condition],                   // array of conditions
-  condition: condition
-};
+const requires = [condition];
 
 export default { condition, requires }
