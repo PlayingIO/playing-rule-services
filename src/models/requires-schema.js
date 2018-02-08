@@ -3,11 +3,12 @@ import fp from 'mostly-func';
 // metric based condition
 const metricCondition = {
   metric: { type: 'String' },                // id of metric
+  type: { type: 'String' },                  // type of metric
   item: { type: 'String' },                  // set item to be compared
   operator: { type: 'String', enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
-  value: { type: 'String' },                 // value of the metric/time
+  value: { type: 'String' },                 // value of the metric
 };
 
 // action based condition
@@ -51,7 +52,7 @@ const formulaCondition = {
 };
 
 const andOrCondition = {
-  type: { type: 'String', enum: [            // type of condition
+  rule: { type: 'String', enum: [            // type of rule
     'metric', 'action', 'team', 'and', 'or'
   ], required: true },
   not: { type: 'Boolean', default: false },  // whether invert the condition
