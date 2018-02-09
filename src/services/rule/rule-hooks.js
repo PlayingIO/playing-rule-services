@@ -17,6 +17,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
+        hooks.populate('achievement.metric', { service: 'metrics' }),
         hooks.presentEntity(RuleEntity, options),
         hooks.responder()
       ]
