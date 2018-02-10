@@ -55,18 +55,18 @@ const andOrCondition = {
   rule: { type: 'String', enum: [            // type of rule
     'metric', 'action', 'team', 'and', 'or'
   ], required: true },
-  not: { type: 'Boolean', default: false },  // whether invert the condition
-  conditions: [{ type: 'Mixed' }],           // array of conditions joined with an AND or OR operator
+  not: { type: 'Boolean' },                  // whether invert the condition
+  conditions: { type: Array },               // array of conditions joined with an AND or OR operator
 };
 
-const condition = fp.mergeAll(
+const condition = fp.mergeAll([
   metricCondition,
   actionCondition,
   teamCondition,
   timedCondition,
   formulaCondition,
   andOrCondition
-);
+]);
 
 // requires structure
 const requires = [condition];
