@@ -2,33 +2,33 @@ import fp from 'mostly-func';
 
 // metric based condition
 const metricCondition = {
-  metric: { type: 'String' },                // id of metric
-  type: { type: 'String' },                  // type of metric
-  item: { type: 'String' },                  // set item to be compared
-  operator: { type: 'String', enum: [        // relational operator
+  metric: { type: String },                // id of metric
+  type: { type: String },                  // type of metric
+  item: { type: String },                  // set item to be compared
+  operator: { type: String, enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
-  value: { type: 'String' },                 // value of the metric
+  value: { type: String },                 // value of the metric
 };
 
 // action based condition
 const actionCondition = {
-  action: { type: 'String' },                // id of action
-  operator: { type: 'String', enum: [        // relational operator
+  action: { type: String },                // id of action
+  operator: { type: String, enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
-  value: { type: 'String' },                 // number of times the action should be executed by the player
+  value: { type: String },                 // number of times the action should be executed by the player
 };
 
 // team based condition
 const teamCondition = {
-  team: { type: 'String' },                  // definition id of team,
-  role: { type: 'String' },                  // role the player should have
+  team: { type: String },                  // definition id of team,
+  role: { type: String },                  // role the player should have
 };
 
 // timed condition
 const timedCondition = {
-  time: { type: 'String', enum: [            // time unit to be counted, against a fixed duration
+  time: { type: String, enum: [            // time unit to be counted, against a fixed duration
     'hour_of_day',
     'day_of_week',
     'day_of_month',
@@ -36,26 +36,26 @@ const timedCondition = {
     'week_of_year',
     'month_of_year'
   ]},
-  operator: { type: 'String', enum: [        // relational operator
+  operator: { type: String, enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
-  value: { type: 'String' },                 // count of the unit
+  value: { type: String },                 // count of the unit
 };
 
 // formula based condition
 const formulaCondition = {
-  lhs: { type: 'String' },                   // lhs formula
-  operator: { type: 'String', enum: [        // relational operator
+  lhs: { type: String },                   // lhs formula
+  operator: { type: String, enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
-  rhs: { type: 'String' },                   // rhs formula
+  rhs: { type: String },                   // rhs formula
 };
 
 const andOrCondition = {
-  rule: { type: 'String', enum: [            // type of rule
+  rule: { type: String, enum: [            // type of rule
     'metric', 'action', 'team', 'and', 'or'
   ], required: true },
-  not: { type: 'Boolean' },                  // whether invert the condition
+  not: { type: Boolean },                  // whether invert the condition
   conditions: { type: Array },               // array of conditions joined with an AND or OR operator
 };
 
