@@ -56,7 +56,7 @@ const andOrCondition = {
     'metric', 'action', 'team', 'and', 'or'
   ], required: true },
   not: { type: Boolean },                  // whether invert the condition
-  conditions: { type: Array },               // array of conditions joined with an AND or OR operator
+  conditions: { type: Array, default: undefined }, // array of conditions joined with an AND or OR operator
 };
 
 const condition = fp.mergeAll([
