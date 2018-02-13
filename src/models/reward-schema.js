@@ -1,7 +1,7 @@
 // reward structure
 const reward = {
-  metric: {                                  // the metric which will be used for the reward
-    id: { type: 'ObjectId' },                // ID of the metric
+  metric: {                                // the metric which will be used for the reward
+    id: { type: 'ObjectId' },              // ID of the metric
     type: { type: String },                // type of the metric
   },
   probabilty: { type: Number },            // chance [0, 1] that this reward in an action or process task can be given
