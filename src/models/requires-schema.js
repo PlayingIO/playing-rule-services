@@ -28,7 +28,7 @@ const teamCondition = {
 
 // timed condition
 const timedCondition = {
-  time: { type: String, enum: [            // time unit to be counted, against a fixed duration
+  unit: { type: String, enum: [            // time unit to be counted, against a fixed duration
     'hour_of_day',
     'day_of_week',
     'day_of_month',
@@ -53,13 +53,14 @@ const formulaCondition = {
 
 const andOrCondition = {
   rule: { type: String, enum: [            // type of rule
-    'metric', 'action', 'team', 'and', 'or'
+    'metric', 'action', 'team', 'time', 'formula', 'and', 'or'
   ], required: true },
   not: { type: Boolean },                  // whether invert the condition
   conditions: { type: Array, default: undefined }, // array of conditions joined with an AND or OR operator
 };
 
 const condition = fp.mergeAll([
+  { _id: false },
   metricCondition,
   actionCondition,
   teamCondition,
