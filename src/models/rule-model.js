@@ -8,21 +8,23 @@ import { variable } from './variable-schema';
 
 // achievement rules
 const achievement = {
-  metric: { type: 'ObjectId' },              // id of the set metric
-  rules: [{                                  // array of the set metric that the player will gain
+  metric: { type: 'ObjectId' },            // id of the set metric
+  rules: [{                                // array of the set metric that the player will gain
+    _id: false,
     item: {
       name: { type: String },              // name of the set metric
       number: { type: Number },            // number of this item the player would gain
     },
-    requires: requires                       // conditions of the achievement
+    requires: requires                     // conditions of the achievement
   }]
 };
 
 // level rules
 const level = {
-  point: { type: 'ObjectId' },               // id of the point metric used to calculate the levels
-  state: { type: 'ObjectId' },               // id of the state metric which will supply the list of states to be used as levels
-  levels: [{                                 // array of the state metric with threshold
+  point: { type: 'ObjectId' },             // id of the point metric used to calculate the levels
+  state: { type: 'ObjectId' },             // id of the state metric which will supply the list of states to be used as levels
+  levels: [{                               // array of the state metric with threshold
+    _id: false,
     rank: { type: String },                // name of the state metric
     threshold: { type: Number },           // threshold of point metric that is required by the player to gain this level
   }]
@@ -31,8 +33,9 @@ const level = {
 // custom rules
 const custom = {
   rules: [{
-    rewards: [reward],                       // set of metrics that a player gets when he finishes this action
-    requires: requires                       // conditions of the rewards
+    _id: false,
+    rewards: [reward],                     // set of metrics that a player gets when he finishes this action
+    requires: requires                     // conditions of the rewards
   }]
 };
 
@@ -47,10 +50,10 @@ const fields = {
     'level',
     'custom'
   ]},
-  achievement: achievement,                  // achievement rule
-  level: level,                              // level rule
-  custom: custom,                            // custom rule
-  variables: [variable],                     // variables available within this rule
+  achievement: achievement,                // achievement rule
+  level: level,                            // level rule
+  custom: custom,                          // custom rule
+  variables: [variable],                   // variables available within this rule
   tags: [{ type: String }],                // the tags of the rule
 };
 
