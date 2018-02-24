@@ -8,7 +8,8 @@ const reward = {
   item: { type: String },                     // name of the set metric
   chance: { type: Number, default: 100 },     // chance [0, 100] that this reward in an action or process task can be given
   value: { type: String },                    // value by which the player's score changes
-  recur: { type: Boolean },                   // apply the reward on every loop of the looped task
+  recur: { type: Boolean },                   // wether apply the reward on every loop of the looped task
+                                              //   or only after all it's loops are complete
   resolution: { type: String },               // delay the rewards until the resolution task
 };
 
