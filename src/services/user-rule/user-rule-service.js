@@ -37,6 +37,7 @@ class UserRuleService extends BaseService {
         'level.point',
         'custom.rules.requires.metric',
         'custom.rules.rewards.metric',
+        '*.rules.requires',
         '*'
       ]},
       paginate: false

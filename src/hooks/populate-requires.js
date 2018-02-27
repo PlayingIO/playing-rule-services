@@ -15,11 +15,16 @@ function getMetricRules(conditions) {
   }, [], conditions));
 }
 
-export default function populateRequires(options = {}) {
+export default function populateRequires(target) {
   return (hook) => {
     assert(hook.type === 'after', `documentEnrichers must be used as a 'after' hook.`);
 
-    let results = [].concat(hook.result && hook.result.data || hook.result || []);
+    let params = fp.assign({ query: {} }, hook.params);
+    let data = hook.result && hook.result.data || hook.result || [];
+
+    // target must be specified by $select to assoc
+    if (!helpers.isSelected(target, params.query.$select)) return hook;
+
     const requires = fp.reduce((arr, rule) => {
       if (rule.type === 'achievement') {
         return arr.concat(fp.map(fp.prop('requires'), rule.achievement.rules || []));
@@ -27,7 +32,7 @@ export default function populateRequires(options = {}) {
         return arr.concat(fp.map(fp.prop('requires'), rule.custom.rules || []));
       }
       return arr;
-    }, [], results);
+    }, [], data);
     const metricRules = fp.flatten(fp.map(getMetricRules, requires));
     return helpers.populateByService(hook.app, 'metric', 'type')(metricRules).then(results => {
       return hook;

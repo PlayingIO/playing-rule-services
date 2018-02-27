@@ -22,7 +22,7 @@ module.exports = function(options = {}) {
         hooks.populate('level.state', { service: 'states' }),
         hooks.populate('level.point', { service: 'points' }),
         hooks.populate('custom.rules.rewards.metric', { service: 'metrics' }),
-        populateRequires(),
+        populateRequires('*.rules.requires'),
         hooks.presentEntity(RuleEntity, options),
         hooks.responder()
       ]
