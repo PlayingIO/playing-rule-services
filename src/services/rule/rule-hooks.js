@@ -17,7 +17,10 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        hooks.populate('achievement.metric', { service: 'metrics' }),
+        hooks.populate('achievement.metric', { service: 'sets' }),
+        hooks.populate('level.state', { service: 'states' }),
+        hooks.populate('level.point', { service: 'points' }),
+        hooks.populate('custom.rules.rewards.metric', { service: 'metrics' }),
         hooks.presentEntity(RuleEntity, options),
         hooks.responder()
       ]

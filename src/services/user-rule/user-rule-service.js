@@ -32,8 +32,12 @@ class UserRuleService extends BaseService {
     // get available rules
     const getRules = () => svcRules.find({
       query: { $select: [
-        'achievement.rules.rewards.metric',
-        'custom.rules.rewards.metric', '*'
+        'achievement.metric',
+        'level.state',
+        'level.point',
+        'custom.rules.requires.metric',
+        'custom.rules.rewards.metric',
+        '*'
       ]},
       paginate: false
     });
