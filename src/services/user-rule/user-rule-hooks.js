@@ -12,17 +12,7 @@ module.exports = function(options = {}) {
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' }))
       ],
-      get: [],
-      find: [],
       create: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' }))
-      ],
-      update: [
-        iff(isProvider('external'),
-          associateCurrentUser({ idField: 'id', as: 'user' }))
-      ],
-      patch: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' }))
       ]

@@ -22,22 +22,11 @@ class UserRuleService extends BaseService {
   }
 
   /**
-   * process action only
-   */
-  get(id, params) {
-    if (id === 'process') {
-      return this._process(id, null, params);
-    } else {
-      return null;
-    }
-  }
-
-  /**
    * rules process for current player
    */
-  _process(id, data, params) {
+  create(data, params) {
     params = params || { query: {} };
-    assert(params.user, 'params.user not provided');
+    assert(data.user, 'params.user not provided');
 
     const svcRules = this.app.service('rules');
     // get available rules
