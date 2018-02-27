@@ -1,6 +1,7 @@
 import { hooks as auth } from 'feathers-authentication';
 import { hooks } from 'mostly-feathers-mongoose';
 import RuleEntity from '~/entities/rule-entity';
+import populateRequires from '../../hooks/populate-requires';
 
 module.exports = function(options = {}) {
   return {
@@ -21,6 +22,7 @@ module.exports = function(options = {}) {
         hooks.populate('level.state', { service: 'states' }),
         hooks.populate('level.point', { service: 'points' }),
         hooks.populate('custom.rules.rewards.metric', { service: 'metrics' }),
+        populateRequires(),
         hooks.presentEntity(RuleEntity, options),
         hooks.responder()
       ]
