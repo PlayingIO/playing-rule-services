@@ -1,43 +1,43 @@
 import fp from 'mostly-func';
 
-const fulfillMetric = (cond) => {
+const fulfillMetric = (scores, cond) => {
   return true;
 };
 
-const fulfillAction = (cond) => {
+const fulfillAction = (scores, cond) => {
   return true;
 };
 
-const fulfillTeam = (cond) => {
+const fulfillTeam = (scores, cond) => {
   return true;
 };
 
-const fulfillTime = (cond) => {
+const fulfillTime = (scores, cond) => {
   return true;
 };
 
-const fulfillFormula = (cond) => {
+const fulfillFormula = (scores, cond) => {
   return true;
 };
 
-export const fulfillRequires = (conditions) => {
+export const fulfillRequires = fp.curry((scores, conditions) => {
   if (!conditions) return true; // requires no conditions
   return fp.all(cond => {
     if (!cond) return true;
     switch (cond.rule) {
-      case 'metric': return fulfillMetric(cond);
-      case 'action': return fulfillAction(cond);
-      case 'team': return fulfillTeam(cond);
-      case 'time': return fulfillTime(cond);
-      case 'formula': return fulfillFormula(cond);
-      case 'and': return cond.conditions && fp.all(fulfillRequires(cond.conditions));
-      case 'or': return cond.conditions && fp.any(fulfillRequires(cond.conditions));
+      case 'metric': return fulfillMetric(scores, cond);
+      case 'action': return fulfillAction(scores, cond);
+      case 'team': return fulfillTeam(scores, cond);
+      case 'time': return fulfillTime(scores, cond);
+      case 'formula': return fulfillFormula(scores, cond);
+      case 'and': return cond.conditions && fp.all(fulfillRequires(scores, cond.conditions));
+      case 'or': return cond.conditions && fp.any(fulfillRequires(scores, cond.conditions));
       default:
         console.warn('fulfillRequires condition rule not supported', cond.rule);
         return true;
     }
   }, conditions);
-};
+});
 
 export const fulfillAchievementRewards = (achievement, scores = []) => {
   return fp.reduce((arr, rule) => {
@@ -79,7 +79,7 @@ export const fulfillLevelRewards = (level, scores = []) => {
 export const fulfillCustomRewards = (rules, scores = []) => {
   // filter by the rule requirements
   const activeRules = fp.filter(rule => {
-    return fp.all(fulfillRequires, rule.requires);
+    return fp.all(fulfillRequires(scores, rule.requires));
   }, rules);
   return fp.flatten(fp.map(fp.prop('rewards'), activeRules));
 };
