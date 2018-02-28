@@ -7,7 +7,7 @@ export const evalFormulaValue = (value, variables = []) => {
 };
 
 const fulfillMetric = (scores, variables, cond) => {
-  const userMetric = fp.find(fp.propEq('metric', cond.metric), scores);
+  const userMetric = fp.find(fp.propEq('metric', cond.metric.id), scores);
   assert(userMetric.type === cond.type, 'fulfillMetric with different type', userMetric.type, cond.type);
   switch (cond.type) {
     case 'point':
@@ -24,9 +24,10 @@ const fulfillMetric = (scores, variables, cond) => {
         case 'gte': return userValue >= condValue;
         case 'lt': return userValue < condValue;
         case 'lte': return userValue <= condValue;
-        default: console.warn(`fulfill ${cond.type} metric operator not supported: '${cond.operator}'`);
+        default:
+          console.warn(`fulfill ${cond.type} metric operator not supported: '${cond.operator}'`);
+          return false;
       }
-      break;
     }
     case 'state': {
       const userValue = userMetric? userMetric.value : null;
@@ -34,12 +35,11 @@ const fulfillMetric = (scores, variables, cond) => {
       switch (cond.operator) {
         case 'eq': return userValue === condValue;
         case 'ne': return userValue !== condValue;
-        default: console.warn('fulfill state metric operator not supported', cond.operator);
+        default:
+          console.warn('fulfill state metric operator not supported', cond.operator);
+          return false;
       }
-      break;
     }
-    default:
-      break;
   }
   return true;
 };
