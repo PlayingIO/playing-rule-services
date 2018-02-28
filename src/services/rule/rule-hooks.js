@@ -1,17 +1,17 @@
 import { hooks as auth } from 'feathers-authentication';
 import { hooks } from 'mostly-feathers-mongoose';
+import { cacheMap } from 'mostly-utils-common';
 import RuleEntity from '~/entities/rule-entity';
 import populateRequires from '../../hooks/populate-requires';
-import LRU from 'lru-cache';
 
-const cacheMap = new LRU({ max: 100 });
+const cache = cacheMap({ max: 100 });
 
 module.exports = function(options = {}) {
   return {
     before: {
       all: [
         auth.authenticate('jwt'),
-        hooks.cache(cacheMap)
+        hooks.cache(cache)
       ],
       get: [],
       find: [],
@@ -22,7 +22,7 @@ module.exports = function(options = {}) {
     },
     after: {
       all: [
-        hooks.cache(cacheMap),
+        hooks.cache(cache),
         hooks.populate('achievement.metric', { service: 'sets' }),
         hooks.populate('level.state', { service: 'states' }),
         hooks.populate('level.point', { service: 'points' }),
