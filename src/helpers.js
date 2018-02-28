@@ -1,3 +1,4 @@
+import assert from 'assert';
 import fp from 'mostly-func';
 
 export const evalFormulaValue = (value, variables = []) => {
@@ -6,6 +7,40 @@ export const evalFormulaValue = (value, variables = []) => {
 };
 
 const fulfillMetric = (scores, variables, cond) => {
+  const userMetric = fp.find(fp.propEq('metric', cond.metric), scores);
+  assert(userMetric.type === cond.type, 'fulfillMetric with different type', userMetric.type, cond.type);
+  switch (cond.type) {
+    case 'point':
+    case 'set':
+    case 'compound': {
+      const userValue = (cond.type === 'set')
+        ? userMetric && userMetric.value[cond.item] || 0
+        : userMetric && userMetric.value || 0;
+      const condValue = evalFormulaValue(cond.value);
+      switch (cond.operator) {
+        case 'eq': return userValue === condValue;
+        case 'ne': return userValue !== condValue;
+        case 'gt': return userValue > condValue;
+        case 'gte': return userValue >= condValue;
+        case 'lt': return userValue < condValue;
+        case 'lte': return userValue <= condValue;
+        default: console.warn(`fulfill ${cond.type} metric operator not supported: '${cond.operator}'`);
+      }
+      break;
+    }
+    case 'state': {
+      const userValue = userMetric? userMetric.value : null;
+      const condValue = cond.value;
+      switch (cond.operator) {
+        case 'eq': return userValue === condValue;
+        case 'ne': return userValue !== condValue;
+        default: console.warn('fulfill state metric operator not supported', cond.operator);
+      }
+      break;
+    }
+    default:
+      break;
+  }
   return true;
 };
 
