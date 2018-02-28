@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service as BaseService } from 'mostly-feathers';
 import fp from 'mostly-func';
 import defaultHooks from './user-rule-hooks';
-import { fulfillAchievementRewards, fulfillLevelRewards } from '../../helpers';
+import { fulfillAchievementRewards, fulfillLevelRewards, fulfillCustomRewards } from '../../helpers';
 
 const debug = makeDebug('playing:user-rules-services:user-rules');
 
@@ -80,7 +80,11 @@ class UserRuleService extends BaseService {
       return Promise.resolve(null);
     };
 
-    const processCustom = (achievement, variables) => {
+    const processCustom = (custom, variables) => {
+      if (custom.rules) {
+        const rewards = fulfillCustomRewards(custom.rules, params.user.scores || []);
+        return Promise.all(createRewards(rewards || []));
+      }
       return Promise.resolve(null);
     };
 
@@ -91,7 +95,7 @@ class UserRuleService extends BaseService {
           case 'level': return processLevel(rule.level, rule.variables);
           case 'custom': return processCustom(rule.custom, rule.variables);
         }
-      }, results));
+      }, results)).then(fp.flatten);
     });
   }
 }

@@ -39,7 +39,7 @@ export const fulfillRequires = (conditions) => {
   }, conditions);
 };
 
-export const fulfillAchievementRewards = (achievement) => {
+export const fulfillAchievementRewards = (achievement, scores = []) => {
   return fp.reduce((arr, rule) => {
     if (rule.item && rule.item.name && rule.item.number) {
       if (fulfillRequires(rule.requires)) {
@@ -76,7 +76,7 @@ export const fulfillLevelRewards = (level, scores = []) => {
   return [];
 };
 
-export const fulfillCustomRewards = (rules) => {
+export const fulfillCustomRewards = (rules, scores = []) => {
   // filter by the rule requirements
   const activeRules = fp.filter(rule => {
     return fp.all(fulfillRequires, rule.requires);
