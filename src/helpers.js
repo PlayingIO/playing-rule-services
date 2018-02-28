@@ -7,8 +7,7 @@ export const evalFormulaValue = (value, variables = []) => {
 };
 
 const fulfillMetric = (user, variables, cond) => {
-  const userMetric = fp.find(fp.propEq('metric', cond.metric.id), user.scores || []);
-  assert(userMetric.type === cond.type, 'fulfillMetric with different type', userMetric.type, cond.type);
+  const userMetric = fp.find(fp.propEq('metric', cond.metric.id || cond.metric), user.scores || []);
   switch (cond.type) {
     case 'point':
     case 'set':
