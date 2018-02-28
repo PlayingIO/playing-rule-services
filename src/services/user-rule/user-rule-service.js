@@ -27,7 +27,8 @@ class UserRuleService extends BaseService {
    */
   create(data, params) {
     params = params || { query: {} };
-    assert(data.user, 'params.user not provided');
+    assert(data.user, 'data.user not provided');
+    assert(params.user && params.user.scores, 'params.user.scores not provided');
 
     const svcRules = this.app.service('rules');
     const svcUserMetrics = this.app.service('user-metrics');
@@ -46,6 +47,7 @@ class UserRuleService extends BaseService {
       paginate: false
     });
 
+    // create rewards
     const createRewards = fp.reduce((arr, reward) => {
       if (reward.metric) {
         reward.metric = reward.metric.id || reward.metric;
@@ -55,6 +57,7 @@ class UserRuleService extends BaseService {
       return arr;
     }, []);
 
+    // process achivement rule
     const processAchievement = (achievement, variables) => {
       if (achievement.metric) {
         assert(achievement.metric.type, 'metric of achievement rule has not populated for process');
@@ -67,6 +70,7 @@ class UserRuleService extends BaseService {
       return Promise.resolve(null);
     };
 
+    // process level rule
     const processLevel = (level, variables) => {
       if (level.state && level.point) {
         assert(level.state.type && level.point.type, 'state or point of level rule has not populated for process');
@@ -80,6 +84,7 @@ class UserRuleService extends BaseService {
       return Promise.resolve(null);
     };
 
+    // process custom rule
     const processCustom = (custom, variables) => {
       if (custom.rules) {
         const rewards = fulfillCustomRewards(custom.rules, params.user.scores || []);
