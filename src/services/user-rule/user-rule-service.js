@@ -87,7 +87,7 @@ class UserRuleService extends BaseService {
     // process custom rule
     const processCustom = (custom, variables) => {
       if (custom.rules) {
-        const rewards = fulfillCustomRewards(custom.rules, params.user.scores);
+        const rewards = fulfillCustomRewards(custom.rules, variables, params.user.scores);
         return Promise.all(createRewards(rewards || []));
       }
       return Promise.resolve(null);
