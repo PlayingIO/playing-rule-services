@@ -44,8 +44,20 @@ const fulfillMetric = (user, variables, cond) => {
 };
 
 const fulfillAction = (user, variables, cond) => {
-  const userAction = fp.find(fp.propEq('action', cond.action.id), user.scores || []);
-  return true;
+  const userAction = fp.find(fp.propEq('action', cond.action.id || cond.action), user.actions || []);
+  const userValue = userAction && userAction.count || 0;
+  const condValue = evalFormulaValue(cond.value);
+  switch (cond.operator) {
+    case 'eq': return userValue === condValue;
+    case 'ne': return userValue !== condValue;
+    case 'gt': return userValue > condValue;
+    case 'gte': return userValue >= condValue;
+    case 'lt': return userValue < condValue;
+    case 'lte': return userValue <= condValue;
+    default:
+      console.warn(`fulfill ${cond.type} metric operator not supported: '${cond.operator}'`);
+      return false;
+  }
 };
 
 const fulfillTeam = (user, variables, cond) => {
