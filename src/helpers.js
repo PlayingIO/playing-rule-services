@@ -6,8 +6,8 @@ export const evalFormulaValue = (value, variables = []) => {
   return parseInt(value);
 };
 
-const fulfillMetric = (scores, variables, cond) => {
-  const userMetric = fp.find(fp.propEq('metric', cond.metric.id), scores);
+const fulfillMetric = (user, variables, cond) => {
+  const userMetric = fp.find(fp.propEq('metric', cond.metric.id), user.scores || []);
   assert(userMetric.type === cond.type, 'fulfillMetric with different type', userMetric.type, cond.type);
   switch (cond.type) {
     case 'point':
@@ -44,42 +44,43 @@ const fulfillMetric = (scores, variables, cond) => {
   return true;
 };
 
-const fulfillAction = (scores, variables, cond) => {
+const fulfillAction = (user, variables, cond) => {
+  const userAction = fp.find(fp.propEq('action', cond.action.id), user.scores || []);
   return true;
 };
 
-const fulfillTeam = (scores, variables, cond) => {
+const fulfillTeam = (user, variables, cond) => {
   return true;
 };
 
-const fulfillTime = (scores, variables, cond) => {
+const fulfillTime = (user, variables, cond) => {
   return true;
 };
 
-const fulfillFormula = (scores, variables, cond) => {
+const fulfillFormula = (user, variables, cond) => {
   return true;
 };
 
-export const fulfillRequires = fp.curry((scores, variables, cond) => {
+export const fulfillRequires = fp.curry((user, variables, cond) => {
   if (cond && cond.rule) {
     switch (cond.rule) {
-      case 'metric': return fulfillMetric(scores, variables, cond);
-      case 'action': return fulfillAction(scores, variables, cond);
-      case 'team': return fulfillTeam(scores, variables, cond);
-      case 'time': return fulfillTime(scores, variables, cond);
-      case 'formula': return fulfillFormula(scores, variables, cond);
-      case 'and': return cond.conditions && fp.all(fulfillRequires(scores, variables), cond.conditions);
-      case 'or': return cond.conditions && fp.any(fulfillRequires(scores, variables), cond.conditions);
+      case 'metric': return fulfillMetric(user, variables, cond);
+      case 'action': return fulfillAction(user, variables, cond);
+      case 'team': return fulfillTeam(user, variables, cond);
+      case 'time': return fulfillTime(user, variables, cond);
+      case 'formula': return fulfillFormula(user, variables, cond);
+      case 'and': return cond.conditions && fp.all(fulfillRequires(user, variables), cond.conditions);
+      case 'or': return cond.conditions && fp.any(fulfillRequires(user, variables), cond.conditions);
       default: console.warn('fulfillRequires condition rule not supported', cond.rule);
     }
   }
   return true;
 });
 
-export const fulfillAchievementRewards = (achievement, variables = [], scores = []) => {
+export const fulfillAchievementRewards = (achievement, variables, user) => {
   return fp.reduce((arr, rule) => {
     if (rule.item && rule.item.name && rule.item.number) {
-      if (fulfillRequires(scores, variables, rule.requires)) {
+      if (fulfillRequires(user, variables, rule.requires)) {
         const reward = {
           metric: achievement.metric,
           item: rule.item.name,
@@ -95,9 +96,9 @@ export const fulfillAchievementRewards = (achievement, variables = [], scores = 
   }, [], achievement.rules || []);
 };
 
-export const fulfillLevelRewards = (level, variables = [], scores = []) => {
-  const currentState = fp.find(fp.propEq('metric', level.state.id), scores);
-  const currentPoint = fp.find(fp.propEq('metric', level.point.id), scores);
+export const fulfillLevelRewards = (level, user) => {
+  const currentState = fp.find(fp.propEq('metric', level.state.id), user.scores || []);
+  const currentPoint = fp.find(fp.propEq('metric', level.point.id), user.scores || []);
   if (level.levels && currentPoint && currentPoint.value > 0) {
     for (let i = 0; i < level.levels.length; i++) {
       if (currentPoint.value < level.levels[i].threshold) {
@@ -113,10 +114,10 @@ export const fulfillLevelRewards = (level, variables = [], scores = []) => {
   return [];
 };
 
-export const fulfillCustomRewards = (rules, variables = [], scores = []) => {
+export const fulfillCustomRewards = (rules, variables, user) => {
   // filter by the rule requirements
   const activeRules = fp.filter(rule => {
-    return fp.all(fulfillRequires(scores, variables), rule.requires);
+    return fp.all(fulfillRequires(user, variables), rule.requires);
   }, rules);
   return fp.flatten(fp.map(fp.prop('rewards'), activeRules));
 };

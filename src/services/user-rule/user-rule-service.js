@@ -63,7 +63,7 @@ class UserRuleService extends BaseService {
         assert(achievement.metric.type, 'metric of achievement rule has not populated for process');
         assert(achievement.metric.type === 'set', 'metric of achievement rule must be a set metric');
         if (achievement.rules) {
-          const rewards = fulfillAchievementRewards(achievement, params.user.scores);
+          const rewards = fulfillAchievementRewards(achievement, params.user);
           return Promise.all(createRewards(rewards || []));
         }
       }
@@ -77,7 +77,7 @@ class UserRuleService extends BaseService {
         assert(level.state.type === 'state', 'state of level rule must be a state metric');
         assert(level.point.type === 'point', 'point of level rule must be a point metric');
         if (level.levels) {
-          const rewards = fulfillLevelRewards(level, params.user.scores);
+          const rewards = fulfillLevelRewards(level, params.user);
           return Promise.all(createRewards(rewards || []));
         }
       }
@@ -87,7 +87,7 @@ class UserRuleService extends BaseService {
     // process custom rule
     const processCustom = (custom, variables) => {
       if (custom.rules) {
-        const rewards = fulfillCustomRewards(custom.rules, variables, params.user.scores);
+        const rewards = fulfillCustomRewards(custom.rules, variables, params.user);
         return Promise.all(createRewards(rewards || []));
       }
       return Promise.resolve(null);
