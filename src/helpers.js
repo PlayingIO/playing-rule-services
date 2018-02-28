@@ -40,24 +40,40 @@ export const fulfillRequires = (conditions) => {
 };
 
 export const fulfillAchievementRewards = (achievement) => {
-  if (achievement.rules) {
-    return fp.reduce((arr, rule) => {
-      if (rule.item && rule.item.name && rule.item.number) {
-        if (fulfillRequires(rule.requires)) {
-          const reward = {
-            metric: achievement.metric,
-            item: rule.item.name,
-            verb: 'add',
-            value: rule.item.number
-          };
-          return fp.concat(arr, [reward]);
-        }
-      } else {
-        console.warn('process achievement rule skipped:', rule);
+  return fp.reduce((arr, rule) => {
+    if (rule.item && rule.item.name && rule.item.number) {
+      if (fulfillRequires(rule.requires)) {
+        const reward = {
+          metric: achievement.metric,
+          item: rule.item.name,
+          verb: 'add',
+          value: rule.item.number
+        };
+        return fp.concat(arr, [reward]);
       }
-      return arr;
-    }, [], achievement.rules);
+    } else {
+      console.warn('process achievement rule skipped:', rule);
+    }
+    return arr;
+  }, [], achievement.rules || []);
+};
+
+export const fulfillLevelRewards = (level, scores = []) => {
+  const currentState = fp.find(fp.propEq('metric', level.state.id), scores);
+  const currentPoint = fp.find(fp.propEq('metric', level.point.id), scores);
+  if (level.levels && currentPoint && currentPoint.value > 0) {
+    for (let i = 0; i < level.levels.length; i++) {
+      if (currentPoint.value < level.levels[i].threshold) {
+        const reward = {
+          metric: level.state,
+          verb: 'set',
+          value: level.levels[i].rank
+        };
+        return [reward];
+      }
+    }
   }
+  return [];
 };
 
 export const fulfillCustomRewards = (rules) => {
