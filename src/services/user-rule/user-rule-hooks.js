@@ -7,7 +7,7 @@ module.exports = function(options = {}) {
   return {
     before: {
       all: [
-        hooks.addParams({ $auth: { query: { $select: 'scores,*' } } }),
+        hooks.addParams({ $auth: { query: { $select: 'scores,actions,*' } } }),
         auth.authenticate('jwt'),
         iff(isProvider('external'),
           queryWithCurrentUser({ idField: 'id', as: 'user' }))
