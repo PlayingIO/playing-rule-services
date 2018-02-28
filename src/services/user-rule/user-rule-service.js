@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service as BaseService } from 'mostly-feathers';
 import fp from 'mostly-func';
 import defaultHooks from './user-rule-hooks';
-import { fulfillAchievementRewards } from '../../helpers';
+import { fulfillAchievementRewards, fulfillLevelRewards } from '../../helpers';
 
 const debug = makeDebug('playing:user-rules-services:user-rules');
 
@@ -61,15 +61,22 @@ class UserRuleService extends BaseService {
         assert(achievement.metric.type === 'set', 'metric of achievement rule must be a set metric');
         if (achievement.rules) {
           const rewards = fulfillAchievementRewards(achievement);
-          if (rewards.length > 0) {
-            return Promise.all(createRewards(rewards));
-          }
+          return Promise.all(createRewards(rewards || []));
         }
       }
       return Promise.resolve(null);
     };
 
-    const processLevel = (achievement, variables) => {
+    const processLevel = (level, variables) => {
+      if (level.state && level.point) {
+        assert(level.state.type && level.point.type, 'state or point of level rule has not populated for process');
+        assert(level.state.type === 'state', 'state of level rule must be a state metric');
+        assert(level.point.type === 'point', 'point of level rule must be a point metric');
+        if (level.levels) {
+          const rewards = fulfillLevelRewards(level, params.user.scores || []);
+          return Promise.all(createRewards(rewards || []));
+        }
+      }
       return Promise.resolve(null);
     };
 
