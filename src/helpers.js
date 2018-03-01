@@ -1,4 +1,5 @@
 import assert from 'assert';
+import dateFn from 'date-fns';
 import fp from 'mostly-func';
 
 export const evalFormulaValue = (value, variables = []) => {
@@ -64,7 +65,31 @@ const fulfillTeam = (user, variables, cond) => {
   return true;
 };
 
+const operator = (op, lhs, rhs) => {
+  switch (op) {
+    case 'eq': return lhs === rhs;
+    case 'ne': return lhs !== rhs;
+    case 'gt': return lhs > rhs;
+    case 'gte': return lhs >= rhs;
+    case 'lt': return lhs < rhs;
+    case 'lte': return lhs <= rhs;
+    default:
+      console.warn(`operator not supported: '${op}'`);
+      return false;
+  }
+};
+
 const fulfillTime = (user, variables, cond) => {
+  const condValue = evalFormulaValue(cond.value);
+  const now = new Date();
+  switch (cond.unit) {
+    case 'hour_of_day': return operator(cond.operator, dateFn.getHours(now), condValue);
+    case 'day_of_week': return operator(cond.operator, dateFn.getISODay(now), condValue);
+    case 'day_of_month': return operator(cond.operator, dateFn.getDate(now), condValue);
+    case 'day_of_year': return operator(cond.operator, dateFn.getDayOfYear(now), condValue);
+    case 'week_of_year': return operator(cond.operator, dateFn.getISOWeek(now), condValue);
+    case 'month_of_year': return operator(cond.operator, dateFn.getMonth(now), condValue);
+  }
   return true;
 };
 
