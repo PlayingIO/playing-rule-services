@@ -2,6 +2,20 @@ import assert from 'assert';
 import dateFn from 'date-fns';
 import fp from 'mostly-func';
 
+export const operator = (op, lhs, rhs) => {
+  switch (op) {
+    case 'eq': return lhs === rhs;
+    case 'ne': return lhs !== rhs;
+    case 'gt': return lhs > rhs;
+    case 'gte': return lhs >= rhs;
+    case 'lt': return lhs < rhs;
+    case 'lte': return lhs <= rhs;
+    default:
+      console.warn(`operator not supported: '${op}'`);
+      return false;
+  }
+};
+
 export const evalFormulaValue = (value, variables = []) => {
   // TODO evaluate value formula
   return parseInt(value);
@@ -17,27 +31,16 @@ const fulfillMetric = (user, variables, cond) => {
         ? userMetric && userMetric.value[cond.item] || 0
         : userMetric && userMetric.value || 0;
       const condValue = evalFormulaValue(cond.value);
-      switch (cond.operator) {
-        case 'eq': return userValue === condValue;
-        case 'ne': return userValue !== condValue;
-        case 'gt': return userValue > condValue;
-        case 'gte': return userValue >= condValue;
-        case 'lt': return userValue < condValue;
-        case 'lte': return userValue <= condValue;
-        default:
-          console.warn(`fulfill ${cond.type} metric operator not supported: '${cond.operator}'`);
-          return false;
-      }
+      return operator(cond.operator, userValue, condValue);
     }
     case 'state': {
       const userValue = userMetric? userMetric.value : null;
       const condValue = cond.value;
-      switch (cond.operator) {
-        case 'eq': return userValue === condValue;
-        case 'ne': return userValue !== condValue;
-        default:
-          console.warn('fulfill state metric operator not supported', cond.operator);
-          return false;
+      if (cond.operator === 'eq' ||  cond.operator === 'ne') {
+        return operator(cond.operator, userValue, condValue);
+      } else {
+        console.warn('fulfill state metric operator not supported', cond.operator);
+        return false;
       }
     }
   }
@@ -48,35 +51,11 @@ const fulfillAction = (user, variables, cond) => {
   const userAction = fp.find(fp.propEq('action', cond.action.id || cond.action), user.actions || []);
   const userValue = userAction && userAction.count || 0;
   const condValue = evalFormulaValue(cond.value);
-  switch (cond.operator) {
-    case 'eq': return userValue === condValue;
-    case 'ne': return userValue !== condValue;
-    case 'gt': return userValue > condValue;
-    case 'gte': return userValue >= condValue;
-    case 'lt': return userValue < condValue;
-    case 'lte': return userValue <= condValue;
-    default:
-      console.warn(`fulfill ${cond.type} metric operator not supported: '${cond.operator}'`);
-      return false;
-  }
+  return operator(cond.operator, userValue, condValue);
 };
 
 const fulfillTeam = (user, variables, cond) => {
   return true;
-};
-
-const operator = (op, lhs, rhs) => {
-  switch (op) {
-    case 'eq': return lhs === rhs;
-    case 'ne': return lhs !== rhs;
-    case 'gt': return lhs > rhs;
-    case 'gte': return lhs >= rhs;
-    case 'lt': return lhs < rhs;
-    case 'lte': return lhs <= rhs;
-    default:
-      console.warn(`operator not supported: '${op}'`);
-      return false;
-  }
 };
 
 const fulfillTime = (user, variables, cond) => {
