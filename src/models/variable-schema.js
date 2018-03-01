@@ -9,4 +9,4 @@ const variable = {                         // dynamic contents for evaluating ru
   default: { type: String },               // default value of the variable
 };
 
-export default { variable }
+export default { variable };
