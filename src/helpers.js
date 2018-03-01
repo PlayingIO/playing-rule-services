@@ -80,6 +80,11 @@ const fulfillTime = (user, variables, cond) => {
 };
 
 const fulfillFormula = (user, variables, cond) => {
+  if (cond && cond.lhs !== undefined && cond.rhs !== undefined) {
+    const lhs = evalFormulaValue(cond.lhs);
+    const rhs = evalFormulaValue(cond.rhs);
+    return operator(cond.operator, lhs, rhs);
+  }
   return false;
 };
 
