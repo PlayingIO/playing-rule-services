@@ -60,7 +60,13 @@ const fulfillAction = (user, variables, cond) => {
 };
 
 const fulfillTeam = (user, variables, cond) => {
-  return true;
+  if (user.groups && cond && cond.team && cond.role) {
+    return fp.any(group => {
+      return group.team === cond.team
+        && fp.contains(cond.role, group.roles || []);
+    });
+  }
+  return false;
 };
 
 const fulfillTime = (user, variables, cond) => {
