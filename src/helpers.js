@@ -22,36 +22,41 @@ export const evalFormulaValue = (value, variables = []) => {
 };
 
 const fulfillMetric = (user, variables, cond) => {
-  const userMetric = fp.find(fp.propEq('metric', cond.metric.id || cond.metric), user.scores || []);
-  switch (cond.type) {
-    case 'point':
-    case 'set':
-    case 'compound': {
-      const userValue = (cond.type === 'set')
-        ? userMetric && userMetric.value[cond.item] || 0
-        : userMetric && userMetric.value || 0;
-      const condValue = evalFormulaValue(cond.value);
-      return operator(cond.operator, userValue, condValue);
-    }
-    case 'state': {
-      const userValue = userMetric? userMetric.value : null;
-      const condValue = cond.value;
-      if (cond.operator === 'eq' ||  cond.operator === 'ne') {
+  if (cond && cond.type && cond.metric) {
+    const userMetric = fp.find(fp.propEq('metric', cond.metric.id || cond.metric), user.scores || []);
+    switch (cond.type) {
+      case 'point':
+      case 'set':
+      case 'compound': {
+        const userValue = (cond.type === 'set')
+          ? userMetric && userMetric.value[cond.item] || 0
+          : userMetric && userMetric.value || 0;
+        const condValue = evalFormulaValue(cond.value);
         return operator(cond.operator, userValue, condValue);
-      } else {
-        console.warn('fulfill state metric operator not supported', cond.operator);
-        return false;
+      }
+      case 'state': {
+        const userValue = userMetric? userMetric.value : null;
+        const condValue = cond.value;
+        if (cond.operator === 'eq' ||  cond.operator === 'ne') {
+          return operator(cond.operator, userValue, condValue);
+        } else {
+          console.warn('fulfill state metric operator not supported', cond.operator);
+          return false;
+        }
       }
     }
   }
-  return true;
+  return false;
 };
 
 const fulfillAction = (user, variables, cond) => {
-  const userAction = fp.find(fp.propEq('action', cond.action.id || cond.action), user.actions || []);
-  const userValue = userAction && userAction.count || 0;
-  const condValue = evalFormulaValue(cond.value);
-  return operator(cond.operator, userValue, condValue);
+  if (cond && cond.action) {
+    const userAction = fp.find(fp.propEq('action', cond.action.id || cond.action), user.actions || []);
+    const userValue = userAction && userAction.count || 0;
+    const condValue = evalFormulaValue(cond.value);
+    return operator(cond.operator, userValue, condValue);
+  }
+  return false;
 };
 
 const fulfillTeam = (user, variables, cond) => {
@@ -59,21 +64,23 @@ const fulfillTeam = (user, variables, cond) => {
 };
 
 const fulfillTime = (user, variables, cond) => {
-  const condValue = evalFormulaValue(cond.value);
-  const now = new Date();
-  switch (cond.unit) {
-    case 'hour_of_day': return operator(cond.operator, dateFn.getHours(now), condValue);
-    case 'day_of_week': return operator(cond.operator, dateFn.getISODay(now), condValue);
-    case 'day_of_month': return operator(cond.operator, dateFn.getDate(now), condValue);
-    case 'day_of_year': return operator(cond.operator, dateFn.getDayOfYear(now), condValue);
-    case 'week_of_year': return operator(cond.operator, dateFn.getISOWeek(now), condValue);
-    case 'month_of_year': return operator(cond.operator, dateFn.getMonth(now), condValue);
+  if (cond && cond.unit) {
+    const condValue = evalFormulaValue(cond.value);
+    const now = new Date();
+    switch (cond.unit) {
+      case 'hour_of_day': return operator(cond.operator, dateFn.getHours(now), condValue);
+      case 'day_of_week': return operator(cond.operator, dateFn.getISODay(now), condValue);
+      case 'day_of_month': return operator(cond.operator, dateFn.getDate(now), condValue);
+      case 'day_of_year': return operator(cond.operator, dateFn.getDayOfYear(now), condValue);
+      case 'week_of_year': return operator(cond.operator, dateFn.getISOWeek(now), condValue);
+      case 'month_of_year': return operator(cond.operator, dateFn.getMonth(now), condValue);
+    }
   }
-  return true;
+  return false;
 };
 
 const fulfillFormula = (user, variables, cond) => {
-  return true;
+  return false;
 };
 
 export const fulfillRequires = fp.curry((user, variables, cond) => {
