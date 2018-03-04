@@ -1,5 +1,6 @@
 // reward structure
 const reward = {
+  _id: false,
   metric: { type: 'ObjectId' },               // the metric which will be used for the reward
   type: { type: String },                     // type of the metric
   verb: { type: String, enum: [               // operation is performed for this reward
