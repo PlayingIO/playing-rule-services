@@ -15,6 +15,12 @@ module.exports = function(options = {}) {
       create: [
         iff(isProvider('external'),
           associateCurrentUser({ idField: 'id', as: 'user' }))
+      ],
+      update: [
+        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
+      ],
+      patch: [
+        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
