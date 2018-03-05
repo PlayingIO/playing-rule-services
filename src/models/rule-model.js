@@ -68,6 +68,3 @@ export default function model (app, name) {
 }
 
 model.schema = fields;
-model.rewards = [reward];
-model.requires = requires;
-model.variables = [variable];
