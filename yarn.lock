@@ -2713,6 +2713,10 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
 
+nerdamer@^0.7.16:
+  version "0.7.16"
+  resolved "https://registry.npmjs.org/nerdamer/-/nerdamer-0.7.16.tgz#3ce6d9bef1f3930200c5b2b72062aa2db3297de2"
+
 nested-error-stacks@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-1.0.2.tgz#19f619591519f096769a5ba9a86e6eeec823c3cf"

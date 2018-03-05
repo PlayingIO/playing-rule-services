@@ -1,6 +1,7 @@
 import assert from 'assert';
 import dateFn from 'date-fns';
 import fp from 'mostly-func';
+import nerdamer from 'nerdamer';
 
 export const operator = (op, lhs, rhs) => {
   switch (op) {
@@ -17,8 +18,12 @@ export const operator = (op, lhs, rhs) => {
 };
 
 export const evalFormulaValue = (value, variables = []) => {
-  // TODO evaluate value formula
-  return parseInt(value);
+  const values = fp.reduce((obj, v) => {
+    if (v.type === 'Number') obj[v.name] = v.default;
+    return obj;
+  }, {}, variables);
+  const result = nerdamer(value, values).evaluate();
+  return parseInt(result.text());
 };
 
 const fulfillMetric = (user, variables, cond) => {
@@ -31,7 +36,7 @@ const fulfillMetric = (user, variables, cond) => {
         const userValue = (cond.type === 'set')
           ? userMetric && userMetric.value[cond.item] || 0
           : userMetric && userMetric.value || 0;
-        const condValue = evalFormulaValue(cond.value);
+        const condValue = evalFormulaValue(cond.value, variables);
         return operator(cond.operator, userValue, condValue);
       }
       case 'state': {
@@ -53,7 +58,7 @@ const fulfillAction = (user, variables, cond) => {
   if (cond && cond.action) {
     const userAction = fp.find(fp.propEq('action', cond.action.id || cond.action), user.actions || []);
     const userValue = userAction && userAction.count || 0;
-    const condValue = evalFormulaValue(cond.value);
+    const condValue = evalFormulaValue(cond.value, variables);
     return operator(cond.operator, userValue, condValue);
   }
   return false;
@@ -71,7 +76,7 @@ const fulfillTeam = (user, variables, cond) => {
 
 const fulfillTime = (user, variables, cond) => {
   if (cond && cond.unit) {
-    const condValue = evalFormulaValue(cond.value);
+    const condValue = evalFormulaValue(cond.value, variables);
     const now = new Date();
     switch (cond.unit) {
       case 'hour_of_day': return operator(cond.operator, dateFn.getHours(now), condValue);
@@ -87,8 +92,8 @@ const fulfillTime = (user, variables, cond) => {
 
 const fulfillFormula = (user, variables, cond) => {
   if (cond && cond.lhs !== undefined && cond.rhs !== undefined) {
-    const lhs = evalFormulaValue(cond.lhs);
-    const rhs = evalFormulaValue(cond.rhs);
+    const lhs = evalFormulaValue(cond.lhs, variables);
+    const rhs = evalFormulaValue(cond.rhs, variables);
     return operator(cond.operator, lhs, rhs);
   }
   return false;
