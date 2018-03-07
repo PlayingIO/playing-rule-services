@@ -17,10 +17,10 @@ function getMetricRules(conditions) {
 
 export default function populateRequires(target) {
   return (hook) => {
-    assert(hook.type === 'after', `documentEnrichers must be used as a 'after' hook.`);
+    assert(hook.type === 'after', `populateRequires must be used as a 'after' hook.`);
 
     let params = fp.assign({ query: {} }, hook.params);
-    let data = hook.result && hook.result.data || hook.result || [];
+    let data = helpers.getHookDataAsArray(hook);
 
     // target must be specified by $select to assoc
     if (!helpers.isSelected(target, params.query.$select)) return hook;
