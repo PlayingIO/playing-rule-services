@@ -2,6 +2,7 @@ import assert from 'assert';
 import fp from 'mostly-func';
 import makeDebug from 'debug';
 import { helpers } from 'mostly-feathers-mongoose';
+import { getMetricRules } from '../helpers';
 
 const debug = makeDebug('playing:rule-services:hooks:populateRequires');
 
@@ -15,7 +16,7 @@ export default function populateRequires(target) {
     // target must be specified by $select to assoc
     if (!helpers.isSelected(target, params.query.$select)) return hook;
 
-    // gether all requies in rules, as array of conditions array
+    // gether all requires in rules, as array of conditions array
     const requires = fp.reduce((arr, rule) => {
       if (rule.type === 'achievement') {
         return arr.concat(fp.map(fp.prop('requires'), rule.achievement.rules || []));
@@ -24,7 +25,7 @@ export default function populateRequires(target) {
       }
       return arr;
     }, [], data);
-    const metricRules = fp.flatten(fp.map(helpers.getMetricRules, requires));
+    const metricRules = fp.flatten(fp.map(getMetricRules, requires));
     return helpers.populateByService(hook.app, 'metric', 'type')(metricRules).then(results => {
       return hook;
     });
