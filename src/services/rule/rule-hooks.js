@@ -8,15 +8,6 @@ import { populateRequires, populateRewards } from '~/hooks';
 
 const cache = cacheMap({ max: 100 });
 
-const getRuleRequires = fp.reduce((arr, rule) => {
-  if (rule.type === 'achievement') {
-    return arr.concat(fp.map(fp.prop('requires'), rule.achievement.rules || []));
-  } else if (rule.type === 'custom') {
-    return arr.concat(fp.map(fp.prop('requires'), rule.custom.rules || []));
-  }
-  return arr;
-}, []);
-
 module.exports = function(options = {}) {
   return {
     before: {
@@ -35,9 +26,10 @@ module.exports = function(options = {}) {
       all: [
         hooks.cache(cache),
         hooks.populate('achievement.metric', { service: 'sets' }),
+        populateRequires('achievement.rules.requires'),
         hooks.populate('level.state', { service: 'states' }),
         hooks.populate('level.point', { service: 'points' }),
-        populateRequires('*.rules.requires', getRuleRequires),
+        populateRequires('custom.rules.requires'),
         populateRewards('custom.rules.rewards'),
         hooks.presentEntity(RuleEntity, options),
         hooks.responder()
