@@ -2,7 +2,7 @@ import { hooks as auth } from 'feathers-authentication';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cacheMap } from 'mostly-utils-common';
 import RuleEntity from '~/entities/rule-entity';
-import populateRequires from '../../hooks/populate-requires';
+import { populateRequires } from '~/hooks';
 
 const cache = cacheMap({ max: 100 });
 
