@@ -3,6 +3,16 @@ import dateFn from 'date-fns';
 import fp from 'mostly-func';
 import nerdamer from 'nerdamer';
 
+export const getMetricRules = (conditions) => {
+  return fp.flatten(fp.reduce((arr, cond) => {
+    if (cond.rule === 'metric') arr = arr.concat(cond);
+    if (cond.rule === 'and' || cond.rule === 'or') {
+      arr = arr.concat(fp.flatten(getMetricRules(cond.conditions || [])));
+    }
+    return arr;
+  }, [], conditions));
+};
+
 export const operator = (op, lhs, rhs) => {
   switch (op) {
     case 'eq': return lhs === rhs;

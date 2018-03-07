@@ -5,16 +5,6 @@ import { helpers } from 'mostly-feathers-mongoose';
 
 const debug = makeDebug('playing:rule-services:hooks:populateRequires');
 
-function getMetricRules(conditions) {
-  return fp.flatten(fp.reduce((arr, cond) => {
-    if (cond.rule === 'metric') arr = arr.concat(cond);
-    if (cond.rule === 'and' || cond.rule === 'or') {
-      arr = arr.concat(fp.flatten(getMetricRules(cond.conditions || [])));
-    }
-    return arr;
-  }, [], conditions));
-}
-
 export default function populateRequires(target) {
   return (hook) => {
     assert(hook.type === 'after', `populateRequires must be used as a 'after' hook.`);
@@ -25,6 +15,7 @@ export default function populateRequires(target) {
     // target must be specified by $select to assoc
     if (!helpers.isSelected(target, params.query.$select)) return hook;
 
+    // gether all requies in rules, as array of conditions array
     const requires = fp.reduce((arr, rule) => {
       if (rule.type === 'achievement') {
         return arr.concat(fp.map(fp.prop('requires'), rule.achievement.rules || []));
@@ -33,7 +24,7 @@ export default function populateRequires(target) {
       }
       return arr;
     }, [], data);
-    const metricRules = fp.flatten(fp.map(getMetricRules, requires));
+    const metricRules = fp.flatten(fp.map(helpers.getMetricRules, requires));
     return helpers.populateByService(hook.app, 'metric', 'type')(metricRules).then(results => {
       return hook;
     });
