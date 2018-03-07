@@ -1,6 +1,7 @@
 import assert from 'assert';
 import dateFn from 'date-fns';
 import fp from 'mostly-func';
+import { helpers } from 'mostly-feathers-mongoose';
 import nerdamer from 'nerdamer';
 
 export const getMetricRules = (conditions) => {
@@ -41,7 +42,7 @@ export const evalFormulaValue = (value, variables = []) => {
 
 const fulfillMetric = (user, variables, cond) => {
   if (cond && cond.type && cond.metric) {
-    const userMetric = fp.find(fp.propEq('metric', cond.metric.id || cond.metric), user.scores || []);
+    const userMetric = fp.find(fp.propEq('metric', helpers.getId(cond.metric)), user.scores || []);
     switch (cond.type) {
       case 'point':
       case 'set':
@@ -69,7 +70,7 @@ const fulfillMetric = (user, variables, cond) => {
 
 const fulfillAction = (user, variables, cond) => {
   if (cond && cond.action) {
-    const userAction = fp.find(fp.propEq('action', cond.action.id || cond.action), user.actions || []);
+    const userAction = fp.find(fp.propEq('action', helpers.getId(cond.action)), user.actions || []);
     const userValue = userAction && userAction.count || 0;
     const condValue = evalFormulaValue(cond.value, variables);
     return operator(cond.operator, userValue, condValue);
