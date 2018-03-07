@@ -6,7 +6,13 @@ import { getMetricRules } from '../helpers';
 
 const debug = makeDebug('playing:rule-services:hooks:populateRequires');
 
-export default function populateRequires(target) {
+const getRequiresField = (target) => fp.reduce((arr, item) => {
+  return arr.concat(helpers.getField(item, target));
+}, []);
+
+export default function populateRequires(target, getRequires) {
+  getRequires = getRequires || getRequiresField(target);
+
   return (hook) => {
     assert(hook.type === 'after', `populateRequires must be used as a 'after' hook.`);
 
@@ -17,14 +23,7 @@ export default function populateRequires(target) {
     if (!helpers.isSelected(target, params.query.$select)) return hook;
 
     // gether all requires in rules, as array of conditions array
-    const requires = fp.reduce((arr, rule) => {
-      if (rule.type === 'achievement') {
-        return arr.concat(fp.map(fp.prop('requires'), rule.achievement.rules || []));
-      } else if (rule.type === 'custom') {
-        return arr.concat(fp.map(fp.prop('requires'), rule.custom.rules || []));
-      }
-      return arr;
-    }, [], data);
+    const requires = getRequires(data);
     const metricRules = fp.flatten(fp.map(getMetricRules, requires));
     return helpers.populateByService(hook.app, 'metric', 'type')(metricRules).then(results => {
       return hook;
