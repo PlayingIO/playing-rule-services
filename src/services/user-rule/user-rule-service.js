@@ -1,6 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { Service as BaseService } from 'mostly-feathers';
+import { helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import defaultHooks from './user-rule-hooks';
 import { fulfillAchievementRewards, fulfillLevelRewards, fulfillCustomRewards } from '../../helpers';
@@ -48,7 +49,7 @@ class UserRuleService extends BaseService {
     // create rewards
     const createRewards = fp.reduce((arr, reward) => {
       if (reward.metric) {
-        reward.metric = reward.metric.id || reward.metric;
+        reward.metric = helper.getId(reward.metric);
         reward.user = data.user;
         arr.push(svcUserMetrics.create(reward));
       }
