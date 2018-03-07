@@ -7,7 +7,8 @@ import { getMetricRules } from '../helpers';
 const debug = makeDebug('playing:rule-services:hooks:populateRequires');
 
 const getRequiresField = (target) => fp.reduce((arr, item) => {
-  return arr.concat(helpers.getField(item, target));
+  arr.push(helpers.getField(item, target) || []);
+  return arr;
 }, []);
 
 export default function populateRequires(target, getRequires) {
