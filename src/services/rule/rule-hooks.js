@@ -2,7 +2,7 @@ import { hooks as auth } from 'feathers-authentication';
 import { hooks } from 'mostly-feathers-mongoose';
 import { cacheMap } from 'mostly-utils-common';
 import RuleEntity from '~/entities/rule-entity';
-import { populateRequires } from '~/hooks';
+import { populateRewards, populateRequires } from '~/hooks';
 
 const cache = cacheMap({ max: 100 });
 
@@ -26,7 +26,7 @@ module.exports = function(options = {}) {
         hooks.populate('achievement.metric', { service: 'sets' }),
         hooks.populate('level.state', { service: 'states' }),
         hooks.populate('level.point', { service: 'points' }),
-        hooks.populate('custom.rules.rewards.metric', { service: 'metrics' }),
+        populateRewards('custom.rules.rewards'),
         populateRequires('*.rules.requires'),
         hooks.presentEntity(RuleEntity, options),
         hooks.responder()
