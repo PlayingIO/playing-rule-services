@@ -12,8 +12,6 @@ const getRequiresField = (target) => fp.reduce((arr, item) => {
 }, []);
 
 export default function populateRequires(target, getRequires) {
-  getRequires = getRequires || getRequiresField(target);
-
   return (hook) => {
     assert(hook.type === 'after', `populateRequires must be used as a 'after' hook.`);
 
@@ -24,7 +22,8 @@ export default function populateRequires(target, getRequires) {
     if (!helpers.isSelected(target, params.query.$select)) return hook;
 
     // gether all requires in rules, as array of conditions array
-    const requires = getRequires(data);
+    const getRequiresFunc = getRequires || getRequiresField(target);
+    const requires = fp.reject(fp.isEmpty, getRequiresFunc(data));
     const metricRules = fp.flatten(fp.map(getMetricRules, requires));
     return helpers.populateByService(hook.app, 'metric', 'type')(metricRules).then(results => {
       return hook;

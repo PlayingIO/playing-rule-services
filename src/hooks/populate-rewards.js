@@ -10,8 +10,6 @@ const getRewardsField = (target) => fp.reduce((arr, item) => {
 }, []);
 
 export default function populateRewards(target, getRewards) {
-  getRewards = getRewards || getRewardsField(target);
-
   return (hook) => {
     assert(hook.type === 'after', `populateRewards must be used as a 'after' hook.`);
 
@@ -22,7 +20,8 @@ export default function populateRewards(target, getRewards) {
     if (!helpers.isSelected(target, params.query.$select)) return hook;
 
     // gether all rewards
-    const metricRewards = getRewards(data);
+    const getRewardsFunc = getRewards || getRewardsField(target);
+    const metricRewards = fp.reject(fp.isNil, getRewardsFunc(data));
     return helpers.populateByService(hook.app, 'metric', 'type')(metricRewards).then(results => {
       return hook;
     });
