@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service, helpers, createService } from 'mostly-feathers-mongoose';
+import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import RuleModel from '~/models/rule-model';
 import defaultHooks from './rule-hooks';
