@@ -26,7 +26,6 @@ class UserRuleService extends BaseService {
    * rules process for current player
    */
   create(data, params) {
-    params = params || { query: {} };
     assert(data.user, 'data.user not provided');
     assert(params.user && params.user.scores, 'params.user.scores not provided');
 
