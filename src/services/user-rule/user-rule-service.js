@@ -1,6 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service as BaseService } from 'mostly-feathers';
+import { Service as BaseService, helpers } from 'mostly-feathers';
 import fp from 'mostly-func';
 import defaultHooks from './user-rule-hooks';
 import { fulfillAchievementRewards, fulfillLevelRewards, fulfillCustomRewards } from '../../helpers';
@@ -47,7 +47,7 @@ class UserRuleService extends BaseService {
     // create rewards
     const createRewards = fp.reduce((arr, reward) => {
       if (reward.metric) {
-        reward.metric = helper.getId(reward.metric);
+        reward.metric = helpers.getId(reward.metric);
         reward.user = data.user;
         arr.push(svcUserMetrics.create(reward));
       }
