@@ -1,9 +1,9 @@
 import { plugins } from 'mostly-feathers-mongoose';
 import { models as contents } from 'playing-content-services';
 
-import { requires } from './requires-schema';
-import { reward } from './reward-schema';
-import { variable } from './variable-schema';
+import { requires } from './requires.schema';
+import { reward } from './reward.schema';
+import { variable } from './variable.schema';
 
 const options = {
   timestamps: true
