@@ -2,7 +2,7 @@ import assert from 'assert';
 import makeDebug from 'debug';
 import { Service as BaseService, helpers } from 'mostly-feathers';
 import fp from 'mostly-func';
-import defaultHooks from './user-rule-hooks';
+import defaultHooks from './user-rule.hooks';
 import { fulfillAchievementRewards, fulfillLevelRewards, fulfillCustomRewards } from '../../helpers';
 
 const debug = makeDebug('playing:user-rules-services:user-rules');
