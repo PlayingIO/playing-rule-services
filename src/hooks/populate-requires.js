@@ -12,21 +12,21 @@ const getRequiresField = (target) => fp.reduce((arr, item) => {
 }, []);
 
 export default function populateRequires(target, getRequires) {
-  return (hook) => {
-    assert(hook.type === 'after', `populateRequires must be used as a 'after' hook.`);
+  return async function (context) {
+    assert(context.type === 'after', `populateRequires must be used as a 'after' hook.`);
 
-    let params = fp.assign({ query: {} }, hook.params);
-    let data = helpers.getHookDataAsArray(hook);
+    let params = fp.assign({ query: {} }, context.params);
+    let data = helpers.getHookDataAsArray(context);
 
-    // target must be specified by $select to assoc
-    if (!helpers.isSelected(target, params.query.$select)) return hook;
+    // target must be specified by $select to populate
+    if (!helpers.isSelected(target, params.query.$select)) return context;
 
     // gether all requires in rules, as array of conditions array
     const getRequiresFunc = getRequires || getRequiresField(target);
     const requires = fp.reject(fp.isEmpty, getRequiresFunc(data));
     const metricRules = fp.flatten(fp.map(getMetricRules, requires));
-    return helpers.populateByService(hook.app, 'metric', 'type')(metricRules).then(results => {
-      return hook;
-    });
+    await helpers.populateByService(context.app, 'metric', 'type')(metricRules);
+
+    return context;
   };
 }
