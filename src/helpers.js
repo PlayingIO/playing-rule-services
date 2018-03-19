@@ -113,7 +113,7 @@ const fulfillFormula = (user, variables, cond) => {
   return false;
 };
 
-export const fulfillRequires = fp.curry((user, variables, cond) => {
+export const fulfillRequire = fp.curry((user, variables, cond) => {
   if (cond && cond.rule) {
     switch (cond.rule) {
       case 'metric': return fulfillMetric(user, variables, cond);
@@ -121,18 +121,22 @@ export const fulfillRequires = fp.curry((user, variables, cond) => {
       case 'team': return fulfillTeam(user, variables, cond);
       case 'time': return fulfillTime(user, variables, cond);
       case 'formula': return fulfillFormula(user, variables, cond);
-      case 'and': return cond.conditions && fp.all(fulfillRequires(user, variables), cond.conditions);
-      case 'or': return cond.conditions && fp.any(fulfillRequires(user, variables), cond.conditions);
-      default: console.warn('fulfillRequires condition rule not supported', cond.rule);
+      case 'and': return cond.conditions && fp.all(fulfillRequire(user, variables), cond.conditions);
+      case 'or': return cond.conditions && fp.any(fulfillRequire(user, variables), cond.conditions);
+      default: console.warn('fulfillRequire condition rule not supported', cond.rule);
     }
   }
   return true;
 });
 
+export const fulfillRequires = fp.curry((user, variables, requires) => {
+  return requires && fp.all(fulfillRequire(user, variables), requires);
+});
+
 export const fulfillAchievementRewards = (achievement, variables, user) => {
   return fp.reduce((arr, rule) => {
     if (rule.item && rule.item.name && rule.item.number) {
-      if (fulfillRequires(user, variables, rule.requires)) {
+      if (fulfillRequire(user, variables, rule.requires)) {
         const reward = {
           metric: achievement.metric,
           item: rule.item.name,
@@ -169,7 +173,7 @@ export const fulfillLevelRewards = (level, user) => {
 export const fulfillCustomRewards = (rules, variables, user) => {
   // filter by the rule requirements
   const activeRules = fp.filter(rule => {
-    return fp.all(fulfillRequires(user, variables), rule.requires);
+    return fp.all(fulfillRequire(user, variables), rule.requires);
   }, rules);
   return fp.flatten(fp.map(fp.prop('rewards'), activeRules));
 };
