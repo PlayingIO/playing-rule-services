@@ -1,6 +1,7 @@
 import assert from 'assert';
 import makeDebug from 'debug';
-import { Service as BaseService, helpers } from 'mostly-feathers';
+import { Service as BaseService } from 'mostly-feathers';
+import { helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import defaultHooks from './user-rule.hooks';
 import { fulfillAchievementRewards, fulfillLevelRewards, fulfillCustomRewards } from '../../helpers';
