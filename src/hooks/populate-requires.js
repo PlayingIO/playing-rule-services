@@ -24,7 +24,7 @@ export default function populateRequires(target, getRequires) {
     // gether all requires in rules, as array of conditions array
     const getRequiresFunc = getRequires || getRequiresField(target);
     const requires = fp.reject(fp.isEmpty, getRequiresFunc(data));
-    const metricRules = fp.flatten(fp.map(getMetricRules, requires));
+    const metricRules = fp.flatMap(getMetricRules, requires);
     await helpers.populateByService(context.app, 'metric', 'type')(metricRules);
 
     return context;

@@ -175,5 +175,5 @@ export const fulfillCustomRewards = (rules, variables, user) => {
   const activeRules = fp.filter(rule => {
     return fp.all(fulfillRequire(user, variables), rule.requires);
   }, rules);
-  return fp.flatten(fp.map(fp.prop('rewards'), activeRules));
+  return fp.flatMap(fp.prop('rewards'), activeRules);
 };
