@@ -2,7 +2,7 @@ import fp from 'mostly-func';
 
 // metric based condition
 const metricCondition = {
-  metric: { type: 'ObjectId' },            // id of metric
+  metric: { type: String },                // id of metric
   type: { type: String },                  // type of metric
   item: { type: String },                  // set item to be compared
   operator: { type: String, enum: [        // relational operator
@@ -13,7 +13,7 @@ const metricCondition = {
 
 // action based condition
 const actionCondition = {
-  action: { type: 'ObjectId' },            // id of action
+  action: { type: String },                // id of action
   operator: { type: String, enum: [        // relational operator
     'eq', 'ne', 'gt', 'ge', 'lt', 'le'
   ]},
