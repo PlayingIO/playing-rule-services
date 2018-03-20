@@ -6,7 +6,7 @@ const metricCondition = {
   type: { type: String },                  // type of metric
   item: { type: String },                  // set item to be compared
   operator: { type: String, enum: [        // relational operator
-    'eq', 'ne', 'gt', 'ge', 'lt', 'le'
+    'eq', 'ne', 'gt', 'gte', 'lt', 'lte'
   ]},
   value: { type: String },                 // value of the metric
 };
@@ -15,7 +15,7 @@ const metricCondition = {
 const actionCondition = {
   action: { type: String },                // id of action
   operator: { type: String, enum: [        // relational operator
-    'eq', 'ne', 'gt', 'ge', 'lt', 'le'
+    'eq', 'ne', 'gt', 'gte', 'lt', 'lte'
   ]},
   value: { type: String },                 // number of times the action should be executed by the player
 };
@@ -37,7 +37,7 @@ const timedCondition = {
     'month_of_year'
   ]},
   operator: { type: String, enum: [        // relational operator
-    'eq', 'ne', 'gt', 'ge', 'lt', 'le'
+    'eq', 'ne', 'gt', 'gte', 'lt', 'lte'
   ]},
   value: { type: String },                 // count of the unit
 };
@@ -46,7 +46,7 @@ const timedCondition = {
 const formulaCondition = {
   lhs: { type: String },                   // lhs formula
   operator: { type: String, enum: [        // relational operator
-    'eq', 'ne', 'gt', 'ge', 'lt', 'le'
+    'eq', 'ne', 'gt', 'gte', 'lt', 'lte'
   ]},
   rhs: { type: String },                   // rhs formula
 };
