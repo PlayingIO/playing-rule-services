@@ -1,6 +1,7 @@
 import { plugins } from 'mostly-feathers-mongoose';
 import { models as contents } from 'playing-content-services';
 
+import { rate } from './rate.schema';
 import { requires } from './requires.schema';
 import { reward } from './reward.schema';
 import { variable } from './variable.schema';
@@ -16,7 +17,7 @@ const achievement = {
     _id: false,
     item: {
       name: { type: String },              // name of the set metric
-      number: { type: Number },            // number of this item the player would gain
+      number: { type: Number },            // number of the item the player would gain
     },
     requires: requires                     // conditions of the achievement
   }]
@@ -37,7 +38,7 @@ const level = {
 const custom = {
   rules: [{
     _id: false,
-    rewards: [reward],                     // set of metrics that a player gets when he finishes this action
+    rewards: [reward],                     // set of metrics that a player gets when he finishes the action
     requires: requires                     // conditions of the rewards
   }]
 };
@@ -56,7 +57,8 @@ const fields = {
   achievement: achievement,                // achievement rule
   level: level,                            // level rule
   custom: custom,                          // custom rule
-  variables: [variable],                   // variables available within this rule
+  variables: [variable],                   // variables available within the rule
+  rate: rate,                              // rate limiting of the rule
   tags: [{ type: String }],                // the tags of the rule
 };
 
