@@ -177,3 +177,10 @@ export const fulfillCustomRewards = (rules, variables, user) => {
   }, rules);
   return fp.flatMap(fp.prop('rewards'), activeRules);
 };
+
+export const processUserRules = (app) => {
+  const svcUserRules = app.service('user-rules');
+  return async (user) => {
+    return svcUserRules.create({ user: user.id }, { user });
+  };
+};
