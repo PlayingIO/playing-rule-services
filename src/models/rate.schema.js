@@ -1,6 +1,6 @@
 // rate structure
 const rate = {
-  count: { type: Number },                 // number of times the player can perform this action within the window
+  count: { type: Number },                 // number of times the player can perform within the window
   frequency: { type: Number },             // frequency of the inverval
   interval: { type: String , enum: [       // interval unit of the window
     'minute', 'hour', 'day', 'week', 'month', 'year'

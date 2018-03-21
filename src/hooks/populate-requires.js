@@ -11,7 +11,7 @@ const getRequiresField = (target) => fp.reduce((arr, item) => {
   return arr;
 }, []);
 
-export default function populateRequires(target, getRequires) {
+export default function populateRequires (target, getRequires) {
   return async function (context) {
     assert(context.type === 'after', `populateRequires must be used as a 'after' hook.`);
 

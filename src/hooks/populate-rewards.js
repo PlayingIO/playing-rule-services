@@ -9,7 +9,7 @@ const getRewardsField = (target) => fp.reduce((arr, item) => {
   return arr.concat(helpers.getField(item, target));
 }, []);
 
-export default function populateRewards(target, getRewards) {
+export default function populateRewards (target, getRewards) {
   return async function (context) {
     assert(context.type === 'after', `populateRewards must be used as a 'after' hook.`);
 

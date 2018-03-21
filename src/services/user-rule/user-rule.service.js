@@ -20,12 +20,12 @@ const defaultOptions = {
 };
 
 class UserRuleService extends BaseService {
-  constructor(options) {
+  constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
   }
 
-  setup(app) {
+  setup (app) {
     super.setup(app);
     this.hooks(defaultHooks(this.options));
   }
@@ -33,7 +33,7 @@ class UserRuleService extends BaseService {
   /**
    * rules process for current player
    */
-  async create(data, params) {
+  async create (data, params) {
     assert(data.user, 'data.user not provided');
     assert(params.user && params.user.scores, 'params.user.scores not provided');
     data.variables = data.variables || {};
@@ -102,7 +102,7 @@ class UserRuleService extends BaseService {
   }
 }
 
-export default function init(app, options, hooks) {
+export default function init (app, options, hooks) {
   return new UserRuleService(options);
 }
 

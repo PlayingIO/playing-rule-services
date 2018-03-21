@@ -5,7 +5,7 @@ import { cache } from 'mostly-feathers-cache';
 import RuleEntity from '~/entities/rule.entity';
 import { populateRequires, populateRewards } from '~/hooks';
 
-module.exports = function(options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
