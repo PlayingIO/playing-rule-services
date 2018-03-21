@@ -182,6 +182,18 @@ export const fulfillCustomRewards = (rules, variables, user) => {
   return fp.flatMap(fp.prop('rewards'), activeRules);
 };
 
+export const addInterval = (startTime, unit) => {
+  switch (unit) {
+    case 'minute': return dateFn.addMinutes(startTime, 1);
+    case 'hour': return dateFn.addHours(startTime, 1);
+    case 'day': return dateFn.addDays(startTime, 1);
+    case 'week': return dateFn.addWeeks(startTime, 1);
+    case 'month': return dateFn.addMonths(startTime, 1);
+    case 'year': return dateFn.addISOYears(startTime, 1);
+    default: return startTime;
+  }
+};
+
 export const processUserRules = (app) => {
   const svcUserRules = app.service('user-rules');
   return async (user) => {
