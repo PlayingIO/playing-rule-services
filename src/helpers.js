@@ -182,6 +182,45 @@ export const fulfillCustomRewards = (rules, variables, user) => {
   return fp.flatMap(fp.prop('rewards'), activeRules);
 };
 
+export const checkRateLimit = (rate, limit) => {
+  const now = new Date();
+  let { count, lastRequest, firstRequest, expiredAt } = limit || {};
+  if (expiredAt && expiredAt.getTime() >= now.getTime()) {
+    // replenish the count for leady bucket
+    if (rate.window === 'leaky') {
+      count += Math.floor(differenceInterval(lastRequest, now) / rate.frequency * count);
+      count = Math.min(count, rate.count);
+    }
+  }
+
+  // reset the limit
+  if (!expiredAt || expiredAt.getTime() < now.getTime()) {
+    count = rate.count;
+    switch (rate.window) {
+      case 'fixed':
+        firstRequest = startOfInterval(now, rate.frequency, rate.interval);
+        break;
+      case 'rolling':
+        firstRequest = now;
+        break;
+      case 'leaky':
+        firstRequest = now;
+        break;
+    }
+    expiredAt = addInterval(firstRequest, rate.frequency, rate.interval);
+  }
+
+  if (expiredAt.getTime() >= now.getTime() && count > 0) {
+    count = count - 1;
+    lastRequest = now;
+  } else {
+    throw new Error('Rate limit exceed, the action can only be triggered ' +
+      `${rate.count} times every ${rate.frequency} ${rate.interval}s`);
+  }
+
+  return { count, lastRequest, firstRequest, expiredAt };
+};
+
 export const startOfInterval = (date, frequency, unit) => {
   switch (unit) {
     case 'minute': {
