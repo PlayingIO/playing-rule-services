@@ -182,15 +182,57 @@ export const fulfillCustomRewards = (rules, variables, user) => {
   return fp.flatMap(fp.prop('rewards'), activeRules);
 };
 
-export const addInterval = (startTime, unit) => {
+export const startOfInterval = (date, frequency, unit) => {
   switch (unit) {
-    case 'minute': return dateFn.addMinutes(startTime, 1);
-    case 'hour': return dateFn.addHours(startTime, 1);
-    case 'day': return dateFn.addDays(startTime, 1);
-    case 'week': return dateFn.addWeeks(startTime, 1);
-    case 'month': return dateFn.addMonths(startTime, 1);
-    case 'year': return dateFn.addISOYears(startTime, 1);
+    case 'minute': {
+      const minute = dateFn.getMinutes(date);
+      return dateFn.startOfMinute(dateFn.setMinutes(date, minute - minute % frequency));
+    }
+    case 'hour': {
+      const hour = dateFn.getHours(date);
+      return dateFn.startOfHour(dateFn.setHours(date, hour - hour % frequency));
+    }
+    case 'day': {
+      const day = dateFn.getDayOfYear(date);
+      return dateFn.startOfDay(dateFn.setDayOfYear(date, day - day % frequency));
+    }
+    case 'week': {
+      const week = dateFn.getISOWeek(date);
+      return dateFn.startOfISOWeek(dateFn.setISOWeek(date, week - week % frequency));
+    }
+    case 'month': {
+      const month = dateFn.getMonth(date);
+      return dateFn.startOfMonth(dateFn.setMonth(date, month - month % frequency));
+    }
+    case 'year': {
+      const year = dateFn.getYear(date);
+      return dateFn.startOfYear(dateFn.setYear(date, year - year % frequency));
+    }
+    default: return date;
+  }
+};
+
+export const addInterval = (startTime, frequency, unit) => {
+  switch (unit) {
+    case 'minute': return dateFn.addMinutes(startTime, frequency);
+    case 'hour': return dateFn.addHours(startTime, frequency);
+    case 'day': return dateFn.addDays(startTime, frequency);
+    case 'week': return dateFn.addWeeks(startTime, frequency);
+    case 'month': return dateFn.addMonths(startTime, frequency);
+    case 'year': return dateFn.addISOYears(startTime, frequency);
     default: return startTime;
+  }
+};
+
+export const differenceInterval = (startTime, endTime, unit) => {
+  switch (unit) {
+    case 'minute': return dateFn.differenceInMinutes(endTime, startTime);
+    case 'hour': return dateFn.differenceInHours(endTime, startTime);
+    case 'day': return dateFn.differenceInDays(endTime, startTime);
+    case 'week': return dateFn.differenceInWeeks(endTime, startTime);
+    case 'month': return dateFn.differenceInMonths(endTime, startTime);
+    case 'year': return dateFn.differenceInYears(endTime, startTime);
+    default: return 0;
   }
 };
 

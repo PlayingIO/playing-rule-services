@@ -15,10 +15,10 @@ const rate = {
 };
 
 const limit = {
-  count: { type: Number },
-  lastRequest: { type: Date },
-  firstRequest: { type: Date },
-  expiredAt: { type: Date }
+  count: { type: Number },                 // count-down number of times the player can perform within the window
+  firstRequest: { type: Date },            // first request time within the window
+  lastRequest: { type: Date },             // last request time within the window
+  expiredAt: { type: Date }                // expire time of the window
 };
 
 export default { rate, limit };
