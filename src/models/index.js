@@ -1,6 +1,6 @@
 import glob from 'glob';
 import path from 'path';
-import { rate } from './rate.schema';
+import { rate, limit } from './rate.schema';
 import { requires } from './requires.schema';
 import { reward } from './reward.schema';
 import { variable } from './variable.schema';
@@ -14,6 +14,7 @@ modelFiles.forEach(file => {
 });
 
 module.exports.rate = { schema: rate };
+module.exports.limit = { schema: limit };
 module.exports.requires = { schema: requires };
 module.exports.rewards = { schema: [reward] };
 module.exports.variables = { schema: [variable] };

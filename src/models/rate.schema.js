@@ -1,4 +1,6 @@
-// rate structure
+/**
+ * rate limiting
+ */
 const rate = {
   count: { type: Number },                 // number of times the player can perform within the window
   frequency: { type: Number },             // frequency of the inverval
@@ -6,10 +8,17 @@ const rate = {
     'minute', 'hour', 'day', 'week', 'month', 'year'
   ]},
   window: { type: String, enum: [          // window of rate limiting being used
-    'rolling',                             // rolling window rate limit
-    'fixed',                               // fixed window rate limit
-    'leaky'                                // leaky bucket algorithm
+    'rolling',                             // replenished continuously as the window keeps moving ahead
+    'fixed',                               // replenished only at the start of the next window
+    'leaky'                                // replenished at constant intervals when exhausted
   ]},
 };
 
-export default { rate };
+const limit = {
+  count: { type: Number },
+  lastRequest: { type: Date },
+  firstRequest: { type: Date },
+  expiredAt: { type: Date }
+};
+
+export default { rate, limit };
