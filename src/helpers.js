@@ -221,6 +221,8 @@ export const checkRateLimit = (rate, limit) => {
       `${rate.count} times every ${rate.frequency} ${rate.interval}s`);
   }
 
+  count = count - (limit && limit.count || 0); // difference with original count
+
   return { count, lastRequest, firstRequest, expiredAt };
 };
 
