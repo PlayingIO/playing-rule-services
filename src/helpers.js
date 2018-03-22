@@ -188,7 +188,7 @@ export const checkRateLimit = (rate, limit) => {
   if (expiredAt && expiredAt.getTime() >= now.getTime()) {
     // replenish the count for leady bucket
     if (rate.window === 'leaky') {
-      count += Math.floor(differenceInterval(lastRequest, now) / rate.frequency * count);
+      count += Math.floor(diffIntervalPercent(lastRequest, now, rate.interval) / rate.frequency * rate.count);
       count = Math.min(count, rate.count);
     }
   }
@@ -198,12 +198,15 @@ export const checkRateLimit = (rate, limit) => {
     count = rate.count;
     switch (rate.window) {
       case 'fixed':
+        // start at a fixed window of interval
         firstRequest = startOfInterval(now, rate.frequency, rate.interval);
         break;
       case 'rolling':
+        // start at a rolling window of interval
         firstRequest = now;
         break;
       case 'leaky':
+        // start at a rolling window also
         firstRequest = now;
         break;
     }
@@ -251,6 +254,7 @@ export const startOfInterval = (date, frequency, unit) => {
   }
 };
 
+// add time frequency
 export const addInterval = (startTime, frequency, unit) => {
   switch (unit) {
     case 'minute': return dateFn.addMinutes(startTime, frequency);
@@ -263,18 +267,20 @@ export const addInterval = (startTime, frequency, unit) => {
   }
 };
 
-export const differenceInterval = (startTime, endTime, unit) => {
+// difference of given dates in percent of time unit
+export const diffIntervalPercent = (startTime, endTime, unit) => {
   switch (unit) {
-    case 'minute': return dateFn.differenceInMinutes(endTime, startTime);
-    case 'hour': return dateFn.differenceInHours(endTime, startTime);
-    case 'day': return dateFn.differenceInDays(endTime, startTime);
-    case 'week': return dateFn.differenceInWeeks(endTime, startTime);
-    case 'month': return dateFn.differenceInMonths(endTime, startTime);
-    case 'year': return dateFn.differenceInYears(endTime, startTime);
+    case 'minute': return dateFn.differenceInSeconds(endTime, startTime) / 60;
+    case 'hour': return dateFn.differenceInMinutes(endTime, startTime) / 60;
+    case 'day': return dateFn.differenceInHours(endTime, startTime) / 24;
+    case 'week': return dateFn.differenceInDays(endTime, startTime) / 7;
+    case 'month': return dateFn.differenceInDays(endTime, startTime) / dateFn.getDaysInMonth(startTime);
+    case 'year': return dateFn.differenceInDays(endTime, startTime) / dateFn.getDaysInYear(startTime);
     default: return 0;
   }
 };
 
+// trigger all rules
 export const processUserRules = (app) => {
   const svcUserRules = app.service('user-rules');
   return async (user) => {
