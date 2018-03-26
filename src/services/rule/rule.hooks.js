@@ -28,7 +28,7 @@ export default function (options = {}) {
         populateRequires('custom.rules.requires'),
         populateRewards('custom.rules.rewards'),
         cache(options.cache),
-        hooks.presentEntity(RuleEntity, options),
+        hooks.presentEntity(RuleEntity, options.entities),
         hooks.responder()
       ]
     }
