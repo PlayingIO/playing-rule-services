@@ -10,7 +10,9 @@ const options = {
   timestamps: true
 };
 
-// achievement rules
+/**
+ * Achievement rules
+ */
 const achievement = {
   metric: { type: 'ObjectId' },            // id of the set metric
   rules: [{                                // array of the set metric that the player will gain
