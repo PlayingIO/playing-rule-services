@@ -17,10 +17,10 @@ export default function (options = {}) {
           associateCurrentUser({ idField: 'id', as: 'user' }))
       ],
       update: [
-        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ],
       patch: [
-        hooks.discardFields('id', 'createdAt', 'updatedAt', 'destroyedAt')
+        hooks.discardFields('createdAt', 'updatedAt', 'destroyedAt')
       ]
     },
     after: {
