@@ -5,7 +5,6 @@ import { requires } from './requires.schema';
 import { reward } from './reward.schema';
 import { variable } from './variable.schema';
 
-
 // load all models
 const modelFiles = glob.sync(path.join(__dirname, './*.model.js'));
 export default Object.assign({
