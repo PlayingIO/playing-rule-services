@@ -21,4 +21,4 @@ const limit = {
   expiredAt: { type: Date }                // expire time of the window
 };
 
-export default { rate, limit };
+export { rate, limit };

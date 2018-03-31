@@ -72,4 +72,4 @@ const condition = fp.mergeAll([
 // requires structure
 const requires = [condition];
 
-export default { condition, requires };
+export { condition, requires };

@@ -2,8 +2,8 @@ import { hooks } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { cache } from 'mostly-feathers-cache';
 
-import RuleEntity from '~/entities/rule.entity';
-import { populateRequires, populateRewards } from '~/hooks';
+import RuleEntity from '../../entities/rule.entity';
+import { populateRequires, populateRewards } from '../../hooks';
 
 export default function (options = {}) {
   return {

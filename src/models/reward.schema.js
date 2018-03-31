@@ -14,4 +14,4 @@ const reward = {
   resolution: { type: String },               // delay the rewards until the resolution task
 };
 
-export default { reward };
+export { reward };

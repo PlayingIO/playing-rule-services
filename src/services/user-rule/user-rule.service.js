@@ -19,7 +19,7 @@ const defaultOptions = {
   name: 'user-rules'
 };
 
-class UserRuleService extends BaseService {
+export class UserRuleService extends BaseService {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);

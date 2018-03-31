@@ -3,7 +3,7 @@ import makeDebug from 'debug';
 import { Service, createService } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 
-import RuleModel from '~/models/rule.model';
+import RuleModel from '../../models/rule.model';
 import defaultHooks from './rule.hooks';
 
 const debug = makeDebug('playing:actions-services:rules');
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'rules'
 };
 
-class RuleService extends Service {
+export class RuleService extends Service {
   constructor (options) {
     options = Object.assign({}, defaultOptions, options);
     super(options);
