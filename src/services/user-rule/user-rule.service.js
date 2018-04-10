@@ -60,7 +60,7 @@ export class UserRuleService extends BaseService {
         assert(achievement.metric.type === 'set', 'metric of achievement rule must be a set metric');
         if (achievement.rules) {
           const rewards = fulfillAchievementRewards(achievement, params.user);
-          return metrics.createUserMetrics(this.app)(data.user, rewards || [], variables);
+          return metrics.createUserMetrics(this.app, data.user, rewards || [], variables);
         }
       }
       return [];
@@ -74,7 +74,7 @@ export class UserRuleService extends BaseService {
         assert(level.point.type === 'point', 'point of level rule must be a point metric');
         if (level.levels) {
           const rewards = fulfillLevelRewards(level, params.user);
-          return metrics.createUserMetrics(this.app)(data.user, rewards || [], variables);
+          return metrics.createUserMetrics(this.app, data.user, rewards || [], variables);
         }
       }
       return [];
@@ -84,7 +84,7 @@ export class UserRuleService extends BaseService {
     const processCustom = async (custom, variables) => {
       if (custom.rules) {
         const rewards = fulfillCustomRewards(custom.rules, variables, params.user);
-        return metrics.createUserMetrics(this.app)(data.user, rewards || [], variables);
+        return metrics.createUserMetrics(this.app, data.user, rewards || [], variables);
       }
       return [];
     };
