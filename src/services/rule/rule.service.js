@@ -6,7 +6,7 @@ import fp from 'mostly-func';
 import RuleModel from '../../models/rule.model';
 import defaultHooks from './rule.hooks';
 
-const debug = makeDebug('playing:actions-services:rules');
+const debug = makeDebug('playing:rule-services:rules');
 
 const defaultOptions = {
   name: 'rules'
