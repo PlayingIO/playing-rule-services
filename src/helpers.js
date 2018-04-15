@@ -187,7 +187,7 @@ export const checkRateLimit = (rate, limit) => {
   let { count, lastRequest, firstRequest, expiredAt } = limit || {};
   if (expiredAt && expiredAt.getTime() >= now.getTime()) {
     // replenish the count for leady bucket
-    if (rate.window === 'leaky') {
+    if (rate.window === 'LEAKY') {
       count += Math.floor(diffIntervalPercent(lastRequest, now, rate.interval) / rate.frequency * rate.count);
       count = Math.min(count, rate.count);
     }
@@ -197,11 +197,11 @@ export const checkRateLimit = (rate, limit) => {
   if (!expiredAt || expiredAt.getTime() < now.getTime()) {
     count = rate.count;
     switch (rate.window) {
-      case 'fixed':
+      case 'FIXED':
         // start at a fixed window of interval
         firstRequest = startOfInterval(now, rate.frequency, rate.interval);
         break;
-      case 'rolling':
+      case 'ROLLING':
         // start at a rolling window of interval
         firstRequest = now;
         break;

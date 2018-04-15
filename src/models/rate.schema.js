@@ -8,9 +8,9 @@ const rate = {
     'minute', 'hour', 'day', 'week', 'month', 'year'
   ]},
   window: { type: String, enum: [          // window of rate limiting being used
-    'rolling',                             // replenished continuously as the window keeps moving ahead
-    'fixed',                               // replenished only at the start of the next window
-    'leaky'                                // replenished at constant intervals when exhausted
+    'ROLLING',                             // replenished continuously as the window keeps moving ahead
+    'FIXED',                               // replenished only at the start of the next window
+    'LEAKY'                                // replenished at constant intervals when exhausted
   ]},
 };
 
