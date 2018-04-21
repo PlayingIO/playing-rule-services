@@ -15,6 +15,6 @@ export default Object.assign({
   variables: { schema: [variable] }
 }, ...modelFiles.map(file => {
   const name = path.basename(file, '.model.js');
-  return { name: require(file).default };
+  return { [name]: require(file).default };
 }));
 
