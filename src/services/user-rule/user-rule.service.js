@@ -35,7 +35,6 @@ export class UserRuleService extends BaseService {
    */
   async create (data, params) {
     assert(params.user && params.user.scores, 'params.user.scores not provided');
-    data.variables = data.variables || {};
 
     const svcRules = this.app.service('rules');
     const svcUserMetrics = this.app.service('user-metrics');
