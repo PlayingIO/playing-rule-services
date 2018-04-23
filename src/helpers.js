@@ -28,19 +28,21 @@ export const operator = (op, lhs, rhs) => {
   }
 };
 
+export const parseVariables = fp.reduce((obj, v) => {
+  switch (v.type) {
+    case 'Number': obj[v.name] = v.default; break;
+    case 'String': obj[v.name] = parseInt(v.default); break;
+  }
+  return obj;
+}, {});
+
 export const getAllVariables = (variables = {}, defaults) => {
-  const values = fp.reduce((obj, v) => {
-    switch (v.type) {
-      case 'Number': obj[v.name] = v.default; break;
-      case 'String': obj[v.name] = parseInt(v.default); break;
-    }
-    return obj;
-  }, {}, defaults);
+  const values = parseVariables(defaults);
   return fp.merge(variables, values);
 };
 
 export const evalFormulaValue = (value, variables = {}) => {
-  const result = nerdamer(value, variables).evaluate();
+  const result = nerdamer(value, fp.clone(variables)).evaluate(); // clone as nerdamer will change vars
   return parseInt(result.text());
 };
 
