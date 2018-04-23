@@ -34,7 +34,6 @@ export class UserRuleService extends BaseService {
    * rules process for current player
    */
   async create (data, params) {
-    assert(data.user, 'data.user not provided');
     assert(params.user && params.user.scores, 'params.user.scores not provided');
     data.variables = data.variables || {};
 
