@@ -1,3 +1,4 @@
+import { camelCase } from 'mostly-func';
 import glob from 'glob';
 import path from 'path';
 import { rate, limit } from './rate.schema';
@@ -14,7 +15,7 @@ export default Object.assign({
   rewards: { schema: [reward] },
   variables: { schema: [variable] }
 }, ...modelFiles.map(file => {
-  const name = path.basename(file, '.model.js');
+  const name = camelCase(path.basename(file, '.model.js'));
   return { [name]: require(file).default };
 }));
 
