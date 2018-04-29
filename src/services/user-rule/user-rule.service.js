@@ -1,7 +1,6 @@
 import assert from 'assert';
 import makeDebug from 'debug';
 import { Service as BaseService } from 'mostly-feathers';
-import { helpers } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { helpers as metrics } from 'playing-metric-services';
 
