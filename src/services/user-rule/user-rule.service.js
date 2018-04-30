@@ -20,7 +20,7 @@ const defaultOptions = {
 
 export class UserRuleService extends BaseService {
   constructor (options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = fp.assign(defaultOptions, options);
     super(options);
   }
 
