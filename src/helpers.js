@@ -207,10 +207,12 @@ export const checkRateLimit = (rate, limit) => {
         // start at a rolling window of interval
         firstRequest = now;
         break;
-      case 'leaky':
+      case 'LEAKY':
         // start at a rolling window also
         firstRequest = now;
         break;
+      default:
+        throw new Error('Unkonwn rate window ' + rate.window);
     }
     expiredAt = addInterval(firstRequest, rate.frequency, rate.interval);
   }
