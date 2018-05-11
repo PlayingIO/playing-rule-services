@@ -25,7 +25,7 @@ export class RuleService extends Service {
 }
 
 export default function init (app, options, hooks) {
-  options = fp.assign({ ModelName: 'rule' }, options);
+  options = { ModelName: 'rule', ...options };
   return createService(app, RuleService, RuleModel, options);
 }
 
