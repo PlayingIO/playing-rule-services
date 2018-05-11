@@ -13,7 +13,7 @@ export default function populateRewards (target, getRewards) {
   return async function (context) {
     assert(context.type === 'after', `populateRewards must be used as a 'after' hook.`);
 
-    let params = fp.assign({ query: {} }, context.params);
+    let params = { query: {}, ...context.params };
     let data = helpers.getHookDataAsArray(context);
 
     // target must be specified by $select to assoc
