@@ -87,7 +87,7 @@ const fulfillAction = (user, variables, cond) => {
 const fulfillTeam = (user, variables, cond) => {
   if (user.groups && cond && cond.team && cond.role) {
     return fp.any(group => {
-      return group.team === cond.team && group.role === cond.role;
+      return group.definition === cond.team && group.role === cond.role;
     }, user.groups);
   }
   return false;
