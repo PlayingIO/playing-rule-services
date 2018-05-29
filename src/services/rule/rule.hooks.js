@@ -1,9 +1,9 @@
 import { hooks } from 'mostly-feathers-mongoose';
 import fp from 'mostly-func';
 import { cache } from 'mostly-feathers-cache';
+import rules from 'playing-rule-common';
 
 import RuleEntity from '../../entities/rule.entity';
-import { populateRequires, populateRewards } from '../../hooks';
 
 export default function (options = {}) {
   return {
@@ -22,11 +22,11 @@ export default function (options = {}) {
     after: {
       all: [
         hooks.populate('achievement.metric', { service: 'sets' }),
-        populateRequires('achievement.rules.requires'),
+        rules.populateRequires('achievement.rules.requires'),
         hooks.populate('level.state', { service: 'states' }),
         hooks.populate('level.point', { service: 'points' }),
-        populateRequires('custom.rules.requires'),
-        populateRewards('custom.rules.rewards'),
+        rules.populateRequires('custom.rules.requires'),
+        rules.populateRewards('custom.rules.rewards'),
         cache(options.cache),
         hooks.presentEntity(RuleEntity, options.entities),
         hooks.responder()

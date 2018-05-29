@@ -3,14 +3,14 @@ import makeDebug from 'debug';
 import { Service as BaseService } from 'mostly-feathers';
 import fp from 'mostly-func';
 import { helpers as metrics } from 'playing-metric-services';
-
-import defaultHooks from './user-rule.hooks';
 import {
   getAllVariables,
   fulfillAchievementRewards,
   fulfillLevelRewards,
   fulfillCustomRewards
-} from '../../helpers';
+} from 'playing-rule-common';
+
+import defaultHooks from './user-rule.hooks';
 
 const debug = makeDebug('playing:user-rules-services:user-rules');
 
