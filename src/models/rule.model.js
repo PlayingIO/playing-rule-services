@@ -17,7 +17,7 @@ const achievement = {
       name: { type: String },              // name of the set metric
       number: { type: Number },            // number of the item the player would gain
     },
-    requires: schemas.requires.schema       // conditions of the achievement
+    requires: schemas.requires.schema      // conditions of the achievement
   }]
 };
 
