@@ -1,7 +1,7 @@
 Playing Game Rules Services
 ===========================
 
-Game rules management microservices for playful applications.
+Game rules management microservices for building playful applications.
 
 # Usage
 

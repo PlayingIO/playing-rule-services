@@ -1,7 +1,7 @@
 {
   "name": "playing-rule-services",
   "version": "1.0.12",
-  "description": "Game rules management microservices for playful applications",
+  "description": "Game rules management microservices for building playful applications",
   "author": "Forafish",
   "license": "MIT",
   "main": "index.js",
