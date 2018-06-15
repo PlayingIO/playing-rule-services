@@ -5,6 +5,6 @@ const RuleEntity = new Entity('Rule', {
   image: { using: BlobEntity }
 });
 
-RuleEntity.excepts('updatedAt', 'destroyedAt');
+RuleEntity.excepts('_id');
 
 export default RuleEntity.asImmutable();
