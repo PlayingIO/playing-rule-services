@@ -5,6 +5,6 @@ const RuleEntity = new Entity('Rule', {
   image: { using: BlobEntity }
 });
 
-RuleEntity.excepts('_id');
+RuleEntity.discard('_id');
 
 export default RuleEntity.asImmutable();
