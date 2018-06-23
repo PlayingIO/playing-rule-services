@@ -7,4 +7,4 @@ const RuleEntity = new Entity('Rule', {
 
 RuleEntity.discard('_id');
 
-export default RuleEntity.asImmutable();
+export default RuleEntity.freeze();
