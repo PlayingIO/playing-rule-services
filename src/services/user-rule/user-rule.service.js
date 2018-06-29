@@ -33,7 +33,7 @@ export class UserRuleService extends BaseService {
    * rules process for current player
    */
   async create (data, params) {
-    assert(params.user && params.user.scores, 'params.user.scores not provided');
+    assert(params.user && params.user.scores, 'user.scores not provided');
 
     const svcRules = this.app.service('rules');
     const svcUserMetrics = this.app.service('user-metrics');
