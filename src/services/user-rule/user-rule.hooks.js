@@ -1,11 +1,11 @@
-import { associateCurrentUser, queryWithCurrentUser } from 'feathers-authentication-hooks';
-import { hooks } from 'mostly-feathers-mongoose';
-import { cache } from 'mostly-feathers-cache';
-import { sanitize, validate } from 'mostly-feathers-validate';
+const { associateCurrentUser, queryWithCurrentUser } = require('feathers-authentication-hooks');
+const { hooks } = require('mostly-feathers-mongoose');
+const { cache } = require('mostly-feathers-cache');
+const { sanitize, validate } = require('mostly-feathers-validate');
 
-import accepts from './user-rule.accepts';
+const accepts = require('./user-rule.accepts');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -25,4 +25,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};

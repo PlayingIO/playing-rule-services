@@ -1,11 +1,11 @@
-import { hooks } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
-import { cache } from 'mostly-feathers-cache';
-import rules from 'playing-rule-common';
+const { hooks } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
+const { cache } = require('mostly-feathers-cache');
+const rules = require('playing-rule-common');
 
-import RuleEntity from '../../entities/rule.entity';
+const RuleEntity = require('../../entities/rule.entity');
 
-export default function (options = {}) {
+module.exports = function (options = {}) {
   return {
     before: {
       all: [
@@ -33,4 +33,4 @@ export default function (options = {}) {
       ]
     }
   };
-}
+};

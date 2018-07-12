@@ -1,16 +1,16 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service as BaseService } from 'mostly-feathers';
-import fp from 'mostly-func';
-import { createUserMetrics } from 'playing-metric-common';
-import {
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service: BaseService } = require('mostly-feathers');
+const fp = require('mostly-func');
+const { createUserMetrics } = require('playing-metric-common');
+const {
   getAllVariables,
   fulfillAchievementRewards,
   fulfillLevelRewards,
   fulfillCustomRewards
-} from 'playing-rule-common';
+} = require('playing-rule-common');
 
-import defaultHooks from './user-rule.hooks';
+const defaultHooks = require('./user-rule.hooks');
 
 const debug = makeDebug('playing:user-rules-services:user-rules');
 
@@ -18,7 +18,7 @@ const defaultOptions = {
   name: 'user-rules'
 };
 
-export class UserRuleService extends BaseService {
+class UserRuleService extends BaseService {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -99,8 +99,7 @@ export class UserRuleService extends BaseService {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   return new UserRuleService(options);
-}
-
-init.Service = UserRuleService;
+};
+module.exports.Service = UserRuleService;

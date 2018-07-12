@@ -1,10 +1,10 @@
-import assert from 'assert';
-import makeDebug from 'debug';
-import { Service, createService } from 'mostly-feathers-mongoose';
-import fp from 'mostly-func';
+const assert = require('assert');
+const makeDebug = require('debug');
+const { Service, createService } = require('mostly-feathers-mongoose');
+const fp = require('mostly-func');
 
-import RuleModel from '../../models/rule.model';
-import defaultHooks from './rule.hooks';
+const RuleModel = require('../../models/rule.model');
+const defaultHooks = require('./rule.hooks');
 
 const debug = makeDebug('playing:rule-services:rules');
 
@@ -12,7 +12,7 @@ const defaultOptions = {
   name: 'rules'
 };
 
-export class RuleService extends Service {
+class RuleService extends Service {
   constructor (options) {
     options = fp.assignAll(defaultOptions, options);
     super(options);
@@ -24,9 +24,8 @@ export class RuleService extends Service {
   }
 }
 
-export default function init (app, options, hooks) {
+module.exports = function init (app, options, hooks) {
   options = { ModelName: 'rule', ...options };
   return createService(app, RuleService, RuleModel, options);
-}
-
-init.Service = RuleService;
+};
+module.exports.Service = RuleService;

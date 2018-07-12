@@ -1,5 +1,5 @@
-import Entity from 'mostly-entity';
-import { BlobEntity } from 'playing-content-common';
+const Entity = require('mostly-entity');
+const { BlobEntity } = require('playing-content-common');
 
 const RuleEntity = new Entity('Rule', {
   image: { using: BlobEntity }
@@ -7,4 +7,4 @@ const RuleEntity = new Entity('Rule', {
 
 RuleEntity.discard('_id');
 
-export default RuleEntity.freeze();
+module.exports = RuleEntity.freeze();
