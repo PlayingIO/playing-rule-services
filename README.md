@@ -12,7 +12,7 @@ Please see the [documentation site](https://playingio.github.io) for more detail
 ## Installation
 
 ```bash
-npm install playing-rule-services
+npm install playing-rule-services --save
 ```
 
 # License
